@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Block unverified email/password users — Google SSO users always have emailVerified = true
   // Mock accounts (@mentor.match) are also exempt from verification
-  const isMockAccount = user.email?.endsWith('@mentor.match');
+  const isMockAccount = user.email?.toLowerCase().endsWith('@mentor.match');
   const isVerifyPage = location.pathname === '/verify';
 
   if (!user.emailVerified && !isMockAccount && !isVerifyPage) {

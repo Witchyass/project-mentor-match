@@ -32,7 +32,7 @@ const EmailVerification = () => {
         }
 
         // Mock accounts are already considered "verified" logic-wise
-        if (user.email?.endsWith('@mentor.match')) {
+        if (user.email?.toLowerCase().endsWith('@mentor.match')) {
             setVerified(true);
         }
     }, [user, navigate]);
