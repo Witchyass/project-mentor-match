@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    function isMatched(mentorId, menteeId) {
+      // Logic for checking if a match exists between two users
+      return exists(/databases/$(database)/documents/matches/$(mentorId + '_' + menteeId));
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(userId);
+    }
+
+    // AI Matching Logic Entries
+    match /matches/{matchId} {
+      allow read: if isSignedIn() && (
+        request.auth.uid == resource.data.mentorId || 
+        request.auth.uid == resource.data.menteeId
+      );
+      allow write: if false; // Only manageable via AI service/Admin
+    }
+
+    // AI Ice Breaker Entries
+    match /icebreakers/{icebreakerId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // Dashboard Data Entries
+    match /stats/{statId} {
+      allow read: if isSignedIn() && isOwner(resource.data.userId);
+      allow write: if false;
+    }
+
+    // Messaging & Files
+    match /messages/{messageId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+    }
+    
+    // Sessions & Reminders
+    match /sessions/{sessionId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

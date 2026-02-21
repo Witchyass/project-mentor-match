@@ -1,0 +1,51 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth.uid !== null",
+      "$uid": {
+        ".write": "auth.uid === $uid"
+      }
+    },
+    "requests": {
+      "$requestId": {
+        ".read": "auth.uid !== null && (data.child('from').val() === auth.uid || data.child('to').val() === auth.uid)",
+        ".write": "auth.uid !== null && (!data.exists() || data.child('from').val() === auth.uid || data.child('to').val() === auth.uid)"
+      }
+    },
+    "notifications": {
+      "$uid": {
+        ".read": "auth.uid === $uid",
+        ".write": "auth.uid !== null",
+        "$notifId": {
+          ".read": "auth.uid === $uid",
+          ".write": "auth.uid !== null"
+        }
+      }
+    },
+    "sessions": {
+      "$sessionId": {
+        ".read": "auth.uid !== null && (data.child('menteeId').val() === auth.uid || data.child('mentorId').val() === auth.uid)",
+        ".write": "auth.uid !== null"
+      }
+    },
+    "messages": {
+      "$conversationId": {
+        ".read": "auth.uid !== null && $conversationId.contains(auth.uid)",
+        ".write": "auth.uid !== null && $conversationId.contains(auth.uid)"
+      }
+    },
+    "chats": {
+      "$conversationId": {
+        ".read": "auth.uid !== null && $conversationId.contains(auth.uid)",
+        ".write": "auth.uid !== null && $conversationId.contains(auth.uid)"
+      }
+    },
+    "matches": {
+      ".read": "auth.uid !== null",
+      "$matchId": {
+        ".read": "auth.uid !== null && (data.child('menteeId').val() === auth.uid || data.child('mentorId').val() === auth.uid)",
+        ".write": "auth.uid !== null"
+      }
+    }
+  }
+}
