@@ -25,44 +25,50 @@ const MyMentees = () => {
         const sessionsRef = ref(db, 'sessions');
 
         const updateData = async () => {
-            const [matchesSnap, sessionsSnap] = await Promise.all([
-                get(matchesRef),
-                get(sessionsRef)
-            ]);
+            try {
+                const [matchesSnap, sessionsSnap] = await Promise.all([
+                    get(matchesRef),
+                    get(sessionsRef)
+                ]);
 
-            const matchesData = matchesSnap.exists() ? matchesSnap.val() : {};
-            const allSessions = sessionsSnap.exists() ? Object.values(sessionsSnap.val()) : [];
-            const myMatches = Object.values(matchesData).filter(m => m.mentorId === user.uid);
+                const matchesData = matchesSnap.exists() ? matchesSnap.val() : {};
+                const allSessions = sessionsSnap.exists() ? Object.values(sessionsSnap.val()) : [];
+                const myMatches = Object.values(matchesData).filter(m => m.mentorId === user.uid);
 
-            const menteesWithDetails = await Promise.all(myMatches.map(async (match) => {
-                const menteeSnap = await get(ref(db, `users/${match.menteeId}`));
-                const menteeProfile = menteeSnap.exists() ? menteeSnap.val() : {};
+                const menteesWithDetails = await Promise.all(myMatches.map(async (match) => {
+                    const menteeSnap = await get(ref(db, `users/${match.menteeId}`));
+                    const menteeProfile = menteeSnap.exists() ? menteeSnap.val() : {};
 
-                const menteeSessions = allSessions.filter(s =>
-                    s.menteeId === match.menteeId &&
-                    s.mentorId === user.uid &&
-                    s.status === 'completed'
-                ).sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+                    const menteeSessions = allSessions.filter(s =>
+                        s.menteeId === match.menteeId &&
+                        s.mentorId === user.uid &&
+                        s.status === 'completed'
+                    ).sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
 
-                const lastSessionDate = menteeSessions.length > 0
-                    ? new Date(menteeSessions[0].dateTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                    : 'No sessions yet';
+                    const lastSessionDate = menteeSessions.length > 0
+                        ? new Date(menteeSessions[0].dateTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                        : 'No sessions yet';
 
-                return {
-                    id: match.menteeId,
-                    matchId: match.id,
-                    name: menteeProfile.name || 'Anonymous Mentee',
-                    status: 'Active',
-                    startDate: new Date(match.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-                    totalSessions: menteeSessions.length,
-                    lastSession: lastSessionDate,
-                    profileImage: menteeProfile.profileImage,
-                    role: menteeProfile.career || 'Mentee'
-                };
-            }));
+                    return {
+                        id: match.menteeId,
+                        matchId: match.id,
+                        name: menteeProfile.name || 'Anonymous Mentee',
+                        status: 'Active',
+                        startDate: new Date(match.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                        totalSessions: menteeSessions.length,
+                        lastSession: lastSessionDate,
+                        profileImage: menteeProfile.profileImage,
+                        role: menteeProfile.career || 'Mentee'
+                    };
+                }));
 
-            setMentees(menteesWithDetails);
-            setLoading(false);
+                setMentees(menteesWithDetails);
+            } catch (err) {
+                console.error("❌ Error fetching mentees data:", err);
+                setMentees([]);
+            } finally {
+                setLoading(false);
+            }
         };
 
         const unsubMatches = onValue(matchesRef, updateData);

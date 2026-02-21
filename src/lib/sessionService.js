@@ -133,6 +133,9 @@ export const subscribeToUserSessions = (userId, callback) => {
         } else {
             callback([]);
         }
+    }, (error) => {
+        console.error("❌ Error subscribing to user sessions:", error);
+        callback([]); // Return empty list on error to stop loading spinner
     });
 };
 

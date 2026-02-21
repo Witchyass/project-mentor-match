@@ -22,15 +22,23 @@ const Sessions = () => {
     const [feedbackData, setFeedbackData] = useState({ isOpen: false, mentorName: '', sessionId: '' });
 
     useEffect(() => {
-        if (!user || !profile) return;
+        if (!user) return;
 
         const unsub = subscribeToUserSessions(user.uid, (sessionData) => {
             setSessions(sessionData);
             setLoading(false);
         });
 
-        return () => unsub();
-    }, [user, profile]);
+        // Safety timeout to stop loading if something goes wrong
+        const timeout = setTimeout(() => {
+            setLoading(false);
+        }, 8000);
+
+        return () => {
+            unsub();
+            clearTimeout(timeout);
+        };
+    }, [user]);
 
     const handleComplete = async (sessionId, partnerName) => {
         setCompleting(sessionId);

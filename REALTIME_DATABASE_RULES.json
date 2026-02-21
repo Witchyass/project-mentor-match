@@ -7,12 +7,14 @@
       }
     },
     "requests": {
+      ".read": "auth.uid !== null",
       "$requestId": {
         ".read": "auth.uid !== null && (data.child('from').val() === auth.uid || data.child('to').val() === auth.uid)",
         ".write": "auth.uid !== null && (!data.exists() || data.child('from').val() === auth.uid || data.child('to').val() === auth.uid)"
       }
     },
     "notifications": {
+      ".read": "auth.uid !== null",
       "$uid": {
         ".read": "auth.uid === $uid",
         ".write": "auth.uid !== null",
@@ -23,18 +25,21 @@
       }
     },
     "sessions": {
+      ".read": "auth.uid !== null",
       "$sessionId": {
         ".read": "auth.uid !== null && (data.child('menteeId').val() === auth.uid || data.child('mentorId').val() === auth.uid)",
         ".write": "auth.uid !== null"
       }
     },
     "messages": {
+      ".read": "auth.uid !== null",
       "$conversationId": {
         ".read": "auth.uid !== null && $conversationId.contains(auth.uid)",
         ".write": "auth.uid !== null && $conversationId.contains(auth.uid)"
       }
     },
     "chats": {
+      ".read": "auth.uid !== null",
       "$conversationId": {
         ".read": "auth.uid !== null && $conversationId.contains(auth.uid)",
         ".write": "auth.uid !== null && $conversationId.contains(auth.uid)"

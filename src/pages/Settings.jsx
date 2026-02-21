@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, Shield, Lock, Trash2, Clock, Eye, Loader2,
     RefreshCcw, Check, AlertTriangle, EyeOff, KeyRound, Zap
@@ -89,12 +89,16 @@ const Settings = () => {
     useEffect(() => {
         if (!user) return;
         const settingsRef = ref(db, `users/${user.uid}/settings`);
-        return onValue(settingsRef, (snapshot) => {
+        const unsubscribe = onValue(settingsRef, (snapshot) => {
             if (snapshot.exists()) {
                 setSettings(prev => ({ ...prev, ...snapshot.val() }));
             }
             setLoading(false);
+        }, (error) => {
+            console.error("❌ Error fetching settings:", error);
+            setLoading(false);
         });
+        return unsubscribe;
     }, [user]);
 
     const saveSettings = async (newSettings) => {
