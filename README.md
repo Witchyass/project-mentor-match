@@ -68,6 +68,22 @@ npm run dev
 
 ---
 
+## 🧪 Testing with Mock Accounts
+
+For testing and demonstration, you can use the pre-configured mock accounts. These do **not** require real Google authentication.
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Mentor** | `amara.okafor@mentor.match` | `MentorMatch2026!Auth` |
+| **Mentor** | `kofi.ampah@mentor.match` | `MentorMatch2026!Auth` |
+| **Mentee** | `chidi.azeez@mentor.match` | `MentorMatch2026!Auth` |
+| **Mentee** | `sarah.kamau@mentor.match` | `MentorMatch2026!Auth` |
+
+> [!TIP]
+> Use these credentials with the **Email/Password** login form to explore the matching and messaging experience instantly.
+
+---
+
 ## 🧪 Testing & Verification
 
 We maintain a suite of unit and component tests to ensure reliability.

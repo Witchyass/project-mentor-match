@@ -84,10 +84,10 @@ const Notifications = () => {
         }
     };
 
-    const formatTimestamp = (ts) => {
+    const formatTimestamp = (ts, now) => {
         if (!ts) return 'Just now';
         const date = new Date(ts);
-        const diff = Date.now() - date.getTime();
+        const diff = now - date.getTime();
         if (diff < 60000) return 'Just now';
         if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
         if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
@@ -208,7 +208,7 @@ const Notifications = () => {
                                                         'Notification'}
                                         </h4>
                                         <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>
-                                            {formatTimestamp(notif.timestamp)}
+                                            {formatTimestamp(notif.timestamp, Date.now())}
                                         </span>
                                     </div>
                                     <p style={{ color: '#475569', fontSize: '1rem', fontWeight: 500, lineHeight: 1.5, marginBottom: '1.5rem' }}>

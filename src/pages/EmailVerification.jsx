@@ -26,7 +26,15 @@ const EmailVerification = () => {
 
     // Redirect if not logged in
     useEffect(() => {
-        if (!user) navigate('/login');
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+
+        // Mock accounts are already considered "verified" logic-wise
+        if (user.email?.endsWith('@mentor.match')) {
+            setVerified(true);
+        }
     }, [user, navigate]);
 
     // Auto-redirect after verified

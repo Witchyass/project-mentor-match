@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     Bell, Shield, Lock, Trash2, Clock, Eye, Loader2,
-    RefreshCcw, Database, Check, AlertTriangle, EyeOff, KeyRound, Zap
+    RefreshCcw, Check, AlertTriangle, EyeOff, KeyRound, Zap
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db, auth } from '../lib/firebase';
@@ -61,7 +61,7 @@ const SectionTitle = ({ icon, children, danger }) => (
 );
 
 const Settings = () => {
-    const { user, profile, logout } = useAuth();
+    const { user } = useAuth();
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState(null); // { msg, type: 'success'|'error' }
@@ -105,7 +105,7 @@ const Settings = () => {
                 settings: newSettings,
                 updatedAt: new Date().toISOString()
             });
-        } catch (e) {
+        } catch (err) {
             showToast('Failed to save settings.', 'error');
         } finally {
             setSaving(false);

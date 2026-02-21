@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, User, Search, Phone, Video, Info, MessageCircle, FileText, Calendar, Star } from 'lucide-react';
+import { Send, Sparkles, Search, Video, Info, Calendar, Star } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../lib/firebase';
 import { ref, push, set, onValue, query, orderByChild, serverTimestamp, get } from 'firebase/database';
@@ -164,7 +164,7 @@ const Messages = () => {
             console.log("✅ Message sent successfully!");
 
             // Send notification to the recipient (Background)
-            sendMessageNotification(user, profile, selectedMatch.id, msgText).catch(e => console.error("Notification fail:", e));
+            sendMessageNotification(user, profile, selectedMatch.id, msgText).catch(err => console.error("Notification fail:", err));
 
         } catch (error) {
             console.error("❌ Error sending message:", error);

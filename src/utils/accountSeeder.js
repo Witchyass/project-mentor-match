@@ -90,7 +90,7 @@ export const seedAuthAccounts = async (onProgress) => {
             results.details.push({ name: userProfile.name, status: 'error', code: error.code, message: error.message });
 
             // If sign-out fails, it might be already signed out or error
-            try { await signOut(secondaryAuth); } catch (e) { }
+            try { await signOut(secondaryAuth); } catch (err) { /* ignore */ }
 
             await delay(1000); // Wait longer on error
         }

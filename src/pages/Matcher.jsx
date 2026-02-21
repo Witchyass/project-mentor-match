@@ -152,14 +152,15 @@ const Matcher = () => {
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeMatch, setActiveMatch] = useState(null); // { mentorName, mentorId, mentorCareer, mentorImage }
-    const [matchLoading, setMatchLoading] = useState(true);
+    const [matchLoading, setMatchLoading] = useState(false);
 
     // Check if mentee already has an accepted match
     useEffect(() => {
         if (!user || profile?.role !== 'mentee') {
-            setMatchLoading(false);
             return;
         }
+
+        setMatchLoading(true);
         const matchesRef = ref(db, 'matches');
         const unsubscribe = onValue(matchesRef, async (snapshot) => {
             if (snapshot.exists()) {

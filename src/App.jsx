@@ -34,8 +34,11 @@ const ProtectedRoute = ({ children }) => {
   if (!user) return <Navigate to="/login" />;
 
   // Block unverified email/password users — Google SSO users always have emailVerified = true
+  // Mock accounts (@mentor.match) are also exempt from verification
+  const isMockAccount = user.email?.endsWith('@mentor.match');
   const isVerifyPage = location.pathname === '/verify';
-  if (!user.emailVerified && !isVerifyPage) {
+
+  if (!user.emailVerified && !isMockAccount && !isVerifyPage) {
     return <Navigate to="/verify" />;
   }
 
