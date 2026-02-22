@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, Shield, Lock, Trash2, Clock, Eye, Loader2,
@@ -11,6 +12,8 @@ import {
     updatePassword,
     reauthenticateWithCredential,
     EmailAuthProvider,
+    GoogleAuthProvider,
+    signInWithPopup,
     deleteUser
 } from 'firebase/auth';
 
@@ -60,7 +63,8 @@ const SectionTitle = ({ icon, children, danger }) => (
 );
 
 const Settings = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState(null);
@@ -76,8 +80,9 @@ const Settings = () => {
     const [pwLoading, setPwLoading] = useState(false);
 
     const [deleteStep, setDeleteStep] = useState(0);
-    const [deletePass, setDeletePass] = useState('');
+    const [deletePass, setDeletePass] = useState(''); // Keep for now in case of future use but unused in UI
     const [deleteLoading, setDeleteLoading] = useState(false);
+
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -126,6 +131,25 @@ const Settings = () => {
             showToast('Password updated!');
         } catch (err) { showToast('Update failed. Check current password.', 'error'); }
         finally { setPwLoading(false); }
+    };
+
+    const handleDeleteAccount = async () => {
+        setDeleteLoading(true);
+        try {
+            // 1. Delete data from database
+            await remove(ref(db, `users/${user.uid}`));
+
+            // 2. Clear auth and redirect
+            // We navigate first to avoid ProtectedRoute redirecting us to /login
+            navigate('/');
+            await deleteUser(auth.currentUser);
+
+            showToast('Account deleted successfully.');
+        } catch (err) {
+            console.error("Deletion error:", err);
+            showToast('Failed to delete account completely.', 'error');
+            setDeleteLoading(false);
+        }
     };
 
     if (loading) return <div style={{ textAlign: 'center', padding: '4rem' }}>Loading...</div>;
@@ -184,16 +208,44 @@ const Settings = () => {
 
                 <Card danger isMobile={isMobile}>
                     <SectionTitle icon={<AlertTriangle size={16} />} danger>Danger Zone</SectionTitle>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>Once deleted, your account cannot be recovered.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>Once deleted, your account and profile data cannot be recovered.</p>
+
                     {deleteStep === 0 ? (
-                        <button onClick={() => setDeleteStep(1)} style={{ padding: '0.7rem 1.25rem', borderRadius: '10px', border: '1px solid #fecaca', background: 'white', color: '#ef4444', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem' }}>Delete Account</button>
+                        <button
+                            onClick={() => setDeleteStep(1)}
+                            style={{ padding: '0.7rem 1.25rem', borderRadius: '10px', border: '1px solid #fecaca', background: 'white', color: '#ef4444', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem' }}
+                        >
+                            Delete Account
+                        </button>
                     ) : (
-                        <div style={{ background: '#fef2f2', padding: '1rem', borderRadius: '12px', border: '1px solid #fecaca' }}>
-                            <p style={{ fontWeight: 800, color: '#dc2626', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Confirm Deletion</p>
-                            <input type="password" value={deletePass} onChange={e => setDeletePass(e.target.value)} placeholder="Type password" style={{ width: '100%', padding: '0.6rem', borderRadius: '8px', border: '1px solid #fecaca', marginBottom: '0.75rem' }} />
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                <button onClick={handleDeleteAccount} className="btn" style={{ background: '#ef4444', color: 'white', flex: 1 }}>{deleteLoading ? '...' : 'Confirm'}</button>
-                                <button onClick={() => setDeleteStep(0)} className="btn" style={{ background: 'white', flex: 1 }}>Cancel</button>
+                        <div style={{ background: '#fef2f2', padding: '1.5rem', borderRadius: '12px', border: '1px solid #fecaca' }}>
+                            <p style={{ fontWeight: 800, color: '#dc2626', marginBottom: '0.5rem', fontSize: '1rem' }}>Are you absolutely sure?</p>
+                            <p style={{ fontSize: '0.85rem', color: '#991b1b', marginBottom: '1.25rem' }}>
+                                This action is permanent and all your profile data will be erased.
+                            </p>
+
+                            <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                <button
+                                    onClick={handleDeleteAccount}
+                                    disabled={deleteLoading}
+                                    style={{
+                                        flex: 2, padding: '0.75rem', borderRadius: '10px',
+                                        background: '#ef4444', color: 'white', border: 'none',
+                                        fontWeight: 800, cursor: 'pointer'
+                                    }}
+                                >
+                                    {deleteLoading ? 'Deleting...' : 'Yes, Delete My Account'}
+                                </button>
+                                <button
+                                    onClick={() => setDeleteStep(0)}
+                                    style={{
+                                        flex: 1, padding: '0.75rem', borderRadius: '10px',
+                                        background: 'white', color: '#475569', border: '1px solid #e2e8f0',
+                                        fontWeight: 700, cursor: 'pointer'
+                                    }}
+                                >
+                                    No, Keep It
+                                </button>
                             </div>
                         </div>
                     )}

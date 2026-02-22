@@ -77,7 +77,34 @@ const Login = () => {
                         </div>
                         <div>
                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#475569', marginBottom: '0.4rem' }}>Password</label>
-                            <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '10px', border: '1px solid #e2e8f0', outline: 'none' }} required />
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    style={{ width: '100%', padding: '0.8rem', paddingRight: '2.5rem', borderRadius: '10px', border: '1px solid #e2e8f0', outline: 'none' }}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '0.75rem',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: '#64748b',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        padding: '4px'
+                                    }}
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', background: '#1e3a8a', color: 'white', borderRadius: '12px', border: 'none', fontWeight: 700, cursor: 'pointer', marginTop: '0.5rem' }}>
                             {loading ? '...' : (isLogin ? 'Sign In' : 'Create Account')}
