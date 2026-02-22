@@ -50,6 +50,24 @@ export const sendMatchRequest = async (fromUser, fromProfile, toUserId) => {
         return { success: false, error: "Self-match not allowed" };
     }
 
+    // CHECK FOR EXISTING REQUEST: Prevent duplicate requests
+    try {
+        const requestsRef = ref(db, 'requests');
+        const snapshot = await get(requestsRef);
+        if (snapshot.exists()) {
+            const allRequests = snapshot.val();
+            const existingRequest = Object.values(allRequests).find(req =>
+                req.from === fromUser.uid && req.to === normalizedToId
+            );
+            if (existingRequest) {
+                logger.log("Duplicate request prevented");
+                return { success: false, error: "Request already exists" };
+            }
+        }
+    } catch (checkError) {
+        console.warn("⚠️ Could not verify existing requests:", checkError);
+    }
+
     const requestRef = ref(db, 'requests');
     const newRequestRef = push(requestRef);
     const requestId = newRequestRef.key;
@@ -227,6 +245,7 @@ export const subscribeToNotifications = (userId, callback) => {
 
     return onValue(notifRef, (snapshot) => {
         if (snapshot.exists()) {
+            const data = snapshot.val();
             const list = Object.keys(data).map(key => ({ id: key, ...data[key] }))
                 .sort((a, b) => {
                     const timeA = (a.timestamp && typeof a.timestamp === 'number') ? a.timestamp : 0;

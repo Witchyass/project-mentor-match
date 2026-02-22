@@ -19,6 +19,9 @@ dist-ssr
 # Firebase
 firebase-debug.log*
 .firebase/
+REALTIME_DATABASE_RULES.json
+firestore.rules
+*.rules
 
 # Editor directories and files
 .vscode/*

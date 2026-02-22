@@ -202,7 +202,7 @@ const Dashboard = () => {
             </div>
 
             {/* Main Content Area */}
-            <div style={{ display: 'grid', gridTemplateColumns: isTablet || isMobile ? '1fr' : '2fr 1fr', gap: isMobile ? '1.5rem' : '2.5rem', alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: isMobile ? '1.5rem' : '2.5rem', alignItems: 'start' }}>
 
                 {/* Left Column: Requests & Sessions */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '1.5rem' : '2.5rem' }}>
@@ -298,25 +298,6 @@ const Dashboard = () => {
                         )}
                     </section>
                 </div>
-
-                {/* Right Column: Profile Summary / Quick Links */}
-                {!isMobile && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <div style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1px solid #f1f5f9' }}>
-                            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                                <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#f8fafc', margin: '0 auto 1rem', overflow: 'hidden', border: '4px solid #f1f5f9' }}>
-                                    <img src={`https://ui-avatars.com/api/?name=${profile?.name}&background=random`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="profile" />
-                                </div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>{profile?.name}</h3>
-                                <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600, textTransform: 'capitalize' }}>{profile?.role}</p>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <button onClick={() => navigate('/profile')} style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: '#1e3a8a', color: 'white', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Edit Profile</button>
-                                <button onClick={() => navigate('/settings')} style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: '#f1f5f9', color: '#1e293b', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Account Settings</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
 
             <DeclineRequestModal

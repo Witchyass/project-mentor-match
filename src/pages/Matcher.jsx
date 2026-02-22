@@ -108,9 +108,6 @@ const MatchCard = ({ profile, onSwipe, index, isMobile }) => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
                             <Globe size={14} /> {Array.isArray(profile.languages) ? profile.languages[0] : 'English'}
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b' }}>
-                            <Star size={14} fill="#f59e0b" /> {profile.rating || '4.9'}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -162,17 +159,53 @@ const Matcher = () => {
 
     useEffect(() => {
         if (!user) return;
-        const unsubscribe = onValue(ref(db, 'users'), (snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                const filtered = Object.keys(data)
-                    .map(key => ({ ...data[key], id: key }))
-                    .filter(p => p.id !== user.uid && (profile?.role === 'mentee' ? p.role === 'mentor' : p.role === 'mentee'));
-                setProfiles(rankMatches(profile, filtered));
-            }
+
+        // Listen to BOTH users and requests to filter properly
+        const usersRef = ref(db, 'users');
+        const requestsRef = ref(db, 'requests');
+
+        let allUsers = {};
+        let mySentRequests = [];
+
+        const updateFilteredProfiles = () => {
+            const filtered = Object.keys(allUsers)
+                .map(key => ({ ...allUsers[key], id: key }))
+                .filter(p => {
+                    const isRightRole = profile?.role === 'mentee' ? p.role === 'mentor' : p.role === 'mentee';
+                    const isNotSelf = p.id !== user.uid;
+                    const isVisible = p.settings?.privacy?.profileVisibility !== false;
+
+                    // NEW: Filter out mentors I've already requested
+                    const alreadyRequested = mySentRequests.some(req =>
+                        req.from === user.uid && req.to === p.id && (req.status === 'pending' || req.status === 'accepted')
+                    );
+
+                    return isNotSelf && isRightRole && isVisible && !alreadyRequested;
+                });
+            setProfiles(rankMatches(profile, filtered));
             setLoading(false);
+        };
+
+        const unsubUsers = onValue(usersRef, (snapshot) => {
+            if (snapshot.exists()) {
+                allUsers = snapshot.val();
+                updateFilteredProfiles();
+            } else {
+                setLoading(false);
+            }
         });
-        return () => unsubscribe();
+
+        const unsubRequests = onValue(requestsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                mySentRequests = Object.values(snapshot.val()).filter(r => r.from === user.uid);
+                updateFilteredProfiles();
+            }
+        });
+
+        return () => {
+            unsubUsers();
+            unsubRequests();
+        };
     }, [user, profile]);
 
     const handleRequestMatch = async (p) => {

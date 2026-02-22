@@ -19,13 +19,15 @@ const EXPERIENCE_MAP = {
 
 // Semantic mapping for common skills to handle partial/related matches
 const SKILL_MAP = {
-    "react": ["frontend", "javascript", "web", "ui"],
-    "node": ["backend", "javascript", "server", "api"],
-    "python": ["data science", "backend", "ai", "ml"],
-    "design": ["ui", "ux", "product", "figma"],
-    "management": ["leadership", "strategy", "product", "agile"],
-    "aws": ["cloud", "devops", "infrastructure"],
-    "javascript": ["frontend", "web", "logic"]
+    "react": ["frontend", "javascript", "web", "ui", "nextjs", "typescript"],
+    "node": ["backend", "javascript", "server", "api", "express", "sql"],
+    "python": ["data science", "backend", "ai", "ml", "django", "flask"],
+    "design": ["ui", "ux", "product", "figma", "visual", "prototyping"],
+    "management": ["leadership", "strategy", "product", "agile", "scrum", "business"],
+    "aws": ["cloud", "devops", "infrastructure", "azure", "gcp", "docker"],
+    "javascript": ["frontend", "web", "logic", "typescript", "es6"],
+    "marketing": ["growth", "seo", "content", "strategy", "social media"],
+    "sales": ["business development", "negotiation", "strategy", "crm"]
 };
 
 /**
@@ -35,6 +37,7 @@ const getSemanticSkills = (skills = []) => {
     const semanticSet = new Set();
     skills.forEach(skill => {
         const s = skill.toLowerCase().trim();
+        if (!s) return;
         semanticSet.add(s);
         if (SKILL_MAP[s]) {
             SKILL_MAP[s].forEach(related => semanticSet.add(related));
@@ -54,8 +57,6 @@ const calculateSimilarity = (setA, setB) => {
 
 /**
  * Calculates a compatibility score from 0-100 between two profiles.
- * @param {Object} user - The current logged-in user profile
- * @param {Object} target - The profile being evaluated
  */
 export const calculateCompatibility = (user, target) => {
     if (!user || !target || user.role === target.role) return 0;
@@ -63,44 +64,61 @@ export const calculateCompatibility = (user, target) => {
     let finalScore = 0;
 
     // 1. Semantic Skill Match (45%)
-    const userSkills = getSemanticSkills(user.skills || []);
-    const targetSkills = getSemanticSkills(target.skills || []);
+    const userSkills = getSemanticSkills(user.skills || user.interests || []);
+    const targetSkills = getSemanticSkills(target.skills || target.expertiseAreas || []);
     const skillSim = calculateSimilarity(userSkills, targetSkills);
     finalScore += skillSim * 100 * WEIGHTS.SKILLS;
 
     // 2. Career Alignment (35%)
     const userCareer = user.career?.toLowerCase() || "";
     const targetCareer = target.career?.toLowerCase() || "";
-
-    // Check for keyword overlaps in career description
-    const userCareerWords = new Set(userCareer.split(/\s+/).filter(w => w.length > 2));
-    const targetCareerWords = new Set(targetCareer.split(/\s+/).filter(w => w.length > 2));
+    const userCareerWords = new Set(userCareer.split(/[,\s]+/).filter(w => w.length > 2));
+    const targetCareerWords = new Set(targetCareer.split(/[,\s]+/).filter(w => w.length > 2));
     const careerSim = calculateSimilarity(userCareerWords, targetCareerWords);
 
-    // Explicit role goal check for mentees
-    if (user.role === 'mentee') {
-        if (targetCareer.includes(userCareer)) finalScore += 20 * WEIGHTS.CAREER;
+    // Explicit role target check
+    if (user.role === 'mentee' && targetCareer.includes(userCareer) && userCareer.length > 3) {
+        finalScore += 20 * WEIGHTS.CAREER;
     }
-
     finalScore += careerSim * 100 * WEIGHTS.CAREER;
 
-    // 3. Experience Delta (15%)
+    // 3. Experience Delta & Preferences (15%)
     const userExp = EXPERIENCE_MAP[user.experienceLevel] || 1;
     const targetExp = EXPERIENCE_MAP[target.experienceLevel] || 1;
 
     if (user.role === 'mentee') {
-        // Mentees want more experienced mentors
         if (targetExp > userExp) finalScore += 100 * WEIGHTS.EXPERIENCE;
         else if (targetExp === userExp) finalScore += 50 * WEIGHTS.EXPERIENCE;
     } else {
-        // Mentors ideally match with less experienced mentees
         if (targetExp < userExp) finalScore += 100 * WEIGHTS.EXPERIENCE;
         else if (targetExp === userExp) finalScore += 50 * WEIGHTS.EXPERIENCE;
     }
 
-    // 4. Availability Match (5%)
-    if (user.availability === target.availability) {
-        finalScore += 100 * WEIGHTS.AVAILABILITY;
+    // BONUS: Mentorship Style Match
+    const userStyle = (user.mentoringStyle || user.mentorshipStyle || "").toLowerCase();
+    const targetStyle = (target.mentoringStyle || target.mentorshipStyle || "").toLowerCase();
+    if (userStyle && targetStyle && userStyle === targetStyle) {
+        finalScore += 15; // Style match is a strong bonus
+    }
+
+    // BONUS: Country Preference
+    const preferredCountries = user.preferredCountries || [];
+    if (preferredCountries.length > 0 && target.country && preferredCountries.includes(target.country)) {
+        finalScore += 10;
+    }
+
+    // 4. Availability Match (5%) - Fixed overlap check
+    const userSchedule = user.availability?.schedule || [];
+    const targetSchedule = target.availability?.schedule || [];
+
+    const userDays = new Set(userSchedule.filter(d => d.available).map(d => d.day));
+    const targetDays = new Set(targetSchedule.filter(d => d.available).map(d => d.day));
+
+    if (userDays.size > 0 && targetDays.size > 0) {
+        const matchingDays = [...userDays].filter(day => targetDays.has(day));
+        if (matchingDays.length > 0) {
+            finalScore += 100 * WEIGHTS.AVAILABILITY;
+        }
     }
 
     return Math.min(Math.round(finalScore), 100);
@@ -108,8 +126,6 @@ export const calculateCompatibility = (user, target) => {
 
 /**
  * Ranks a list of users based on compatibility with current user.
- * @param {Object} currentUser - The current user's profile
- * @param {Array} otherUsers - List of all user profiles from DB
  */
 export const rankMatches = (currentUser, otherUsers) => {
     if (!currentUser) return [];
@@ -122,9 +138,9 @@ export const rankMatches = (currentUser, otherUsers) => {
         }))
         .sort((a, b) => b.compatibility - a.compatibility);
 
-    // Mentees see top 5 mentors, Mentors see all (but ranked)
+    // Mentees see top 10 mentors (increased from 5)
     if (currentUser.role === 'mentee') {
-        return ranked.slice(0, 5);
+        return ranked.slice(0, 10);
     }
 
     return ranked;

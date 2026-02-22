@@ -69,6 +69,8 @@ const MentorOnlyRoute = ({ children }) => {
 
 import logger from './utils/logger';
 
+import ReminderManager from './components/ReminderManager';
+
 function App() {
   React.useEffect(() => {
     logger.brand();
@@ -80,6 +82,7 @@ function App() {
         <ThemeProvider>
           <ScrollToHash />
           <Layout>
+            <ReminderManager />
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/discover" element={
