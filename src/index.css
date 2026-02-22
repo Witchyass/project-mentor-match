@@ -37,6 +37,12 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout Variables */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+  --header-height: 72px;
+  --max-content-width: 1600px;
 }
 
 [data-theme='dark'] {
@@ -75,6 +81,44 @@ body {
   transition: var(--transition);
   min-height: 100vh;
   overflow-x: hidden;
+  font-size: clamp(0.9rem, 1cqi, 1rem);
+  /* Fluid typography */
+}
+
+/* Responsive Utilities */
+.hide-mobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block !important;
+  }
+}
+
+.show-mobile-flex {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex !important;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
 }
 
 .glass {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Check, X, User, MessageCircle, Sparkles, Clock, Inbox, Filter, Heart } from 'lucide-react';
+import { Bell, Check, X, User, MessageCircle, Sparkles, Clock, Inbox, Filter, Heart, ChevronLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToNotifications, markNotificationAsRead, acceptMatchRequest, declineMatchRequest } from '../lib/matchService';
 import DeclineRequestModal from '../components/DeclineRequestModal';
@@ -18,6 +18,13 @@ const Notifications = () => {
     const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
     const [selectedNotif, setSelectedNotif] = useState(null);
     const navigate = useNavigate();
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (!user) {
@@ -100,20 +107,23 @@ const Notifications = () => {
         return true;
     });
 
-    if (loading) return (
-        <div style={{ padding: '8rem 0', textAlign: 'center' }}>
-            <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #1e3a8a', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto' }} />
-        </div>
-    );
+    if (loading) return <div style={{ textAlign: 'center', padding: '4rem' }}>Loading...</div>;
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '2rem' }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: isMobile ? 'column' : 'row',
+                justifyContent: 'space-between',
+                alignItems: isMobile ? 'flex-start' : 'flex-end',
+                marginBottom: isMobile ? '2rem' : '3rem',
+                gap: '1.5rem'
+            }}>
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em' }}>
-                        {activeTab === 'requests' ? 'Incoming Requests' : 'Notifications'}
+                    <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>
+                        {activeTab === 'requests' ? 'Match Requests' : 'Activity'}
                     </h1>
-                    <p style={{ color: '#64748b', fontWeight: 500 }}>
+                    <p style={{ color: '#64748b', fontWeight: 500, fontSize: '0.95rem' }}>
                         {activeTab === 'requests' ? 'Review people who want to connect with you.' : 'Stay updated with your latest activities.'}
                     </p>
                 </div>
@@ -121,193 +131,117 @@ const Notifications = () => {
                 <div style={{
                     display: 'flex',
                     background: '#f1f5f9',
-                    padding: '0.4rem',
-                    borderRadius: '14px',
-                    gap: '0.25rem'
+                    padding: '4px',
+                    borderRadius: '12px',
+                    width: isMobile ? '100%' : 'auto'
                 }}>
                     {[
-                        { id: 'all', label: 'All', icon: <Bell size={16} /> },
-                        { id: 'requests', label: 'Requests', icon: <Inbox size={16} /> },
-                        { id: 'unread', label: 'Unread', icon: <Filter size={16} /> }
+                        { id: 'all', label: 'All' },
+                        { id: 'requests', label: 'Requests' },
+                        { id: 'unread', label: 'Unread' }
                     ].map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setSearchParams({ tab: tab.id })}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '0.6rem 1.25rem',
-                                borderRadius: '10px',
+                                flex: isMobile ? 1 : 'none',
+                                padding: '0.6rem 1rem',
+                                borderRadius: '8px',
                                 border: 'none',
                                 background: activeTab === tab.id ? 'white' : 'transparent',
                                 color: activeTab === tab.id ? '#1e3a8a' : '#64748b',
                                 fontWeight: 700,
-                                fontSize: '0.9rem',
+                                fontSize: '0.85rem',
                                 cursor: 'pointer',
-                                boxShadow: activeTab === tab.id ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
                                 transition: '0.2s'
                             }}
                         >
-                            {tab.icon} {tab.label}
+                            {tab.label}
                         </button>
                     ))}
                 </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <AnimatePresence mode='popLayout'>
                     {filteredNotifications.length > 0 ? (
                         filteredNotifications.map((notif) => (
                             <motion.div
                                 key={notif.id}
                                 layout
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 style={{
                                     background: 'white',
-                                    padding: '1.75rem',
-                                    borderRadius: '24px',
+                                    padding: isMobile ? '1.25rem' : '1.75rem',
+                                    borderRadius: '20px',
                                     display: 'flex',
-                                    alignItems: 'flex-start',
-                                    gap: '1.5rem',
+                                    flexDirection: 'column',
+                                    gap: '1rem',
                                     border: '1px solid #f1f5f9',
-                                    boxShadow: notif.read ? 'none' : '0 10px 15px -3px rgba(30, 58, 138, 0.05)',
-                                    opacity: notif.read ? 0.7 : 1,
-                                    position: 'relative'
+                                    position: 'relative',
+                                    boxShadow: notif.read ? 'none' : '0 4px 6px -1px rgba(30, 58, 138, 0.04)'
                                 }}
                             >
-                                {!notif.read && (
-                                    <div style={{ position: 'absolute', top: '2rem', right: '2rem', width: '10px', height: '10px', background: '#3b82f6', borderRadius: '50%' }} />
+                                <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+                                    <div style={{
+                                        width: '48px', height: '48px', borderRadius: '12px',
+                                        background: notif.type === 'match_request' ? '#eff6ff' : notif.type === 'new_message' ? '#fdf2f8' : '#f0fdf4',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        color: notif.type === 'match_request' ? '#3b82f6' : notif.type === 'new_message' ? '#db2777' : '#16a34a',
+                                        flexShrink: 0
+                                    }}>
+                                        {notif.type === 'match_request' ? <User size={24} /> : notif.type === 'new_message' ? <MessageCircle size={24} /> : <Sparkles size={24} />}
+                                    </div>
+
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                                            <h4 style={{ fontWeight: 800, fontSize: '1rem', color: '#1e293b' }}>
+                                                {notif.type === 'match_request' ? 'Match Request' : notif.type === 'new_message' ? 'New Message' : 'Team Update'}
+                                            </h4>
+                                            <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>{formatTimestamp(notif.timestamp, Date.now())}</span>
+                                        </div>
+                                        <p style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500, lineHeight: 1.5 }}>{notif.text}</p>
+                                    </div>
+                                </div>
+
+                                {notif.type === 'match_request' && (
+                                    <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
+                                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1.25rem' }}>
+                                            <img src={notif.menteeDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${notif.fromId}`} style={{ width: '40px', height: '40px', borderRadius: '10px' }} alt="" />
+                                            <div>
+                                                <div style={{ fontWeight: 800, color: '#1e3a8a', fontSize: '0.9rem' }}>{notif.menteeDetails?.name || 'Potential Match'}</div>
+                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{notif.menteeDetails?.career}</div>
+                                            </div>
+                                        </div>
+                                        {dealtWith.has(notif.id) || notif.read ? (
+                                            <div style={{ color: '#16a34a', fontWeight: 700, fontSize: '0.85rem' }}>Completed</div>
+                                        ) : (
+                                            <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                                <button onClick={() => handleAccept(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem' }}>Accept</button>
+                                                <button onClick={() => handleDismiss(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', color: '#64748b', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>Decline</button>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
 
-                                <div style={{
-                                    width: '56px',
-                                    height: '56px',
-                                    borderRadius: '16px',
-                                    background: notif.type === 'match_request' ? '#eff6ff' : notif.type === 'new_message' ? '#fdf2f8' : notif.type === 'match_declined' ? '#fefce8' : '#f0fdf4',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: notif.type === 'match_request' ? '#2563eb' : notif.type === 'new_message' ? '#db2777' : notif.type === 'match_declined' ? '#d97706' : '#16a34a',
-                                    flexShrink: 0
-                                }}>
-                                    {notif.type === 'match_request' ? <User size={28} /> :
-                                        notif.type === 'new_message' ? <MessageCircle size={28} /> :
-                                            notif.type === 'match_declined' ? <Heart size={28} /> :
-                                                <Sparkles size={28} />}
-                                </div>
-
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <h4 style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1e293b' }}>
-                                            {notif.type === 'match_request' ? 'Match Request' :
-                                                notif.type === 'new_message' ? 'New Message' :
-                                                    notif.type === 'match_declined' ? 'A note from your mentor' :
-                                                        'Notification'}
-                                        </h4>
-                                        <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>
-                                            {formatTimestamp(notif.timestamp, Date.now())}
-                                        </span>
-                                    </div>
-                                    <p style={{ color: '#475569', fontSize: '1rem', fontWeight: 500, lineHeight: 1.5, marginBottom: '1.5rem' }}>
-                                        {notif.text}
-                                    </p>
-
-                                    {notif.type === 'match_request' && (
-                                        <div style={{
-                                            background: '#f8fafc',
-                                            padding: '1.5rem',
-                                            borderRadius: '16px',
-                                            border: '1px solid #e2e8f0',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '1rem'
-                                        }}>
-                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                                <img
-                                                    src={notif.menteeDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${notif.fromId}`}
-                                                    alt=""
-                                                    style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#e2e8f0' }}
-                                                />
-                                                <div>
-                                                    <div style={{ fontWeight: 800, color: '#1e3a8a' }}>{notif.menteeDetails?.name || 'Potential Match'}</div>
-                                                    <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{notif.menteeDetails?.career}</div>
-                                                </div>
-                                            </div>
-                                            {(dealtWith.has(notif.id) || notif.read) ? (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#16a34a', fontWeight: 700, fontSize: '0.9rem', padding: '0.5rem 0' }}>
-                                                    <Check size={18} /> Dealt with
-                                                </div>
-                                            ) : (
-                                                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                                                    <button
-                                                        onClick={() => handleAccept(notif)}
-                                                        className="btn btn-primary"
-                                                        style={{ flex: 1, padding: '0.6rem', borderRadius: '10px' }}
-                                                    >
-                                                        Accept Connection
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDismiss(notif)}
-                                                        className="btn"
-                                                        style={{ flex: 1, padding: '0.6rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0' }}
-                                                    >
-                                                        Dismiss
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {notif.type === 'match_declined' && (
-                                        <div style={{ background: '#fefce8', border: '1px solid #fde68a', padding: '1.25rem', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                                <img
-                                                    src={notif.mentorDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=mentor`}
-                                                    alt={notif.mentorDetails?.name}
-                                                    style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#e2e8f0', flexShrink: 0 }}
-                                                />
-                                                <div>
-                                                    <div style={{ fontWeight: 700, color: '#92400e', fontSize: '0.9rem' }}>{notif.mentorDetails?.name}</div>
-                                                    <div style={{ fontSize: '0.78rem', color: '#a16207' }}>{notif.mentorDetails?.career}</div>
-                                                </div>
-                                            </div>
-                                            <p style={{ fontSize: '0.95rem', color: '#78350f', fontStyle: 'italic', lineHeight: 1.6, margin: 0 }}>"{notif.rejectionMessage}"</p>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#b45309', fontSize: '0.8rem', fontWeight: 600 }}>
-                                                <Heart size={13} /> Keep going — there's a perfect mentor match waiting for you!
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {notif.type !== 'match_request' && notif.type !== 'match_declined' && !notif.read && (
-                                        <button
-                                            onClick={() => handleMarkRead(notif.id)}
-                                            style={{ color: '#3b82f6', background: 'transparent', border: 'none', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', padding: 0 }}
-                                        >
-                                            Mark as read
-                                        </button>
-                                    )}
-                                </div>
+                                {!notif.read && (
+                                    <button onClick={() => handleMarkRead(notif.id)} style={{ color: '#3b82f6', background: 'transparent', border: 'none', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'flex-start' }}>Mark Read</button>
+                                )}
                             </motion.div>
                         ))
                     ) : (
                         <div style={{ textAlign: 'center', padding: '6rem 0', opacity: 0.5 }}>
-                            <Bell size={64} style={{ margin: '0 auto 1.5rem', opacity: 0.1 }} />
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>No {activeTab} yet</h3>
-                            <p>Check back later for new updates.</p>
+                            <Bell size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.2 }} />
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>All caught up!</h3>
+                            <p style={{ fontSize: '0.9rem' }}>You have no {activeTab} notifications.</p>
                         </div>
                     )}
                 </AnimatePresence>
             </div>
 
-            <DeclineRequestModal
-                isOpen={isDeclineModalOpen}
-                onClose={() => setIsDeclineModalOpen(false)}
-                onConfirm={handleDeclineConfirm}
-                menteeName={selectedNotif?.menteeDetails?.name || 'the mentee'}
-            />
+            <DeclineRequestModal isOpen={isDeclineModalOpen} onClose={() => setIsDeclineModalOpen(false)} onConfirm={handleDeclineConfirm} menteeName={selectedNotif?.menteeDetails?.name || 'the mentee'} />
         </div>
     );
 };

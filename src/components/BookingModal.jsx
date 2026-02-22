@@ -9,6 +9,7 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
     const [step, setStep] = useState(1);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
+    const [topic, setTopic] = useState('');
     const [sendReminders, setSendReminders] = useState(true);
     const [meetLink, setMeetLink] = useState('');
     const [isCreating, setIsCreating] = useState(false);
@@ -20,12 +21,22 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
 
     // Check for existing session
     React.useEffect(() => {
-        if (!isOpen || !user || !mentorId) return;
+        if (!isOpen) return;
+
+        if (rescheduleMode && sessionToReschedule) {
+            setTopic(sessionToReschedule.topic || '');
+            setSelectedDate(sessionToReschedule.dateTime.split('T')[0]);
+        } else {
+            setTopic('');
+            setSelectedDate('');
+        }
+
+        if (!user || !mentorId) return;
 
         import('../lib/sessionService').then(({ findActiveSession }) => {
             findActiveSession(user.uid, mentorId).then(setExistingSession);
         });
-    }, [isOpen, user, mentorId]);
+    }, [isOpen, user, mentorId, rescheduleMode, sessionToReschedule]);
 
     // Generate next 7 days
     const dates = Array.from({ length: 7 }, (_, i) => {
@@ -63,7 +74,8 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                 result = await rescheduleSession(
                     sessionToReschedule.id,
                     dateTime,
-                    profile // initiator
+                    profile, // initiator
+                    topic
                 );
             } else {
                 // Correctly assign roles based on who is initiating
@@ -79,7 +91,8 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                     currentMentorProfile,
                     currentMenteeProfile,
                     dateTime,
-                    60 // 60 minutes duration
+                    60, // 60 minutes duration
+                    topic
                 );
             }
 
@@ -165,7 +178,27 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                             </button>
                                         ))}
                                     </div>
-                                    <button className="btn btn-primary" style={{ width: '100%', marginTop: '2rem' }} disabled={!selectedDate} onClick={() => setStep(2)}>Next Step</button>
+
+                                    <div style={{ marginTop: '1.5rem' }}>
+                                        <p style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text)' }}>Session Topic</p>
+                                        <input
+                                            type="text"
+                                            value={topic}
+                                            onChange={(e) => setTopic(e.target.value)}
+                                            placeholder="e.g., Career Advice, Resume Review..."
+                                            style={{
+                                                width: '100%',
+                                                padding: '1rem',
+                                                borderRadius: 'var(--radius-md)',
+                                                border: '1px solid var(--border)',
+                                                background: 'rgba(255,255,255,0.5)',
+                                                outline: 'none',
+                                                fontSize: '0.95rem'
+                                            }}
+                                        />
+                                    </div>
+
+                                    <button className="btn btn-primary" style={{ width: '100%', marginTop: '2rem' }} disabled={!selectedDate || !topic.trim()} onClick={() => setStep(2)}>Next Step</button>
                                 </div>
                             )}
 

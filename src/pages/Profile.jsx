@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Edit2, MapPin, Mail, User, Briefcase,
-    AtSign, Globe, Plus, Check, X, Save, Loader2
+    AtSign, Globe, Plus, Check, X, Save, Loader2, ChevronLeft
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../lib/firebase';
@@ -16,6 +16,7 @@ const Profile = () => {
     const [remoteProfile, setRemoteProfile] = useState(null);
     const [fetchingRemote, setFetchingRemote] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const isOwnProfile = !uid || uid === user?.uid;
     const currentProfile = isOwnProfile ? profile : remoteProfile;
@@ -39,6 +40,12 @@ const Profile = () => {
 
     const [tempGoal, setTempGoal] = useState('');
     const [tempInterest, setTempInterest] = useState('');
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (!isOwnProfile && uid) {
@@ -113,8 +120,8 @@ const Profile = () => {
     );
 
     const SectionHeader = ({ title, section, editing }) => (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b' }}>{title}</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>{title}</h2>
             {isOwnProfile && (!editing ? (
                 <button
                     onClick={() => setIsEditing(prev => ({ ...prev, [section]: true }))}
@@ -143,230 +150,168 @@ const Profile = () => {
     );
 
     return (
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2.5rem', paddingBottom: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: isMobile ? '1.5rem' : '2rem', paddingBottom: '4rem' }}>
 
             {!isOwnProfile && (
                 <button
                     onClick={() => navigate(-1)}
-                    style={{ background: 'white', border: '1px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569' }}
+                    style={{ background: 'white', border: '1px solid #e2e8f0', padding: '0.6rem 1.2rem', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '0.9rem' }}
                 >
-                    <X size={18} /> Back
+                    <ChevronLeft size={18} /> Back
                 </button>
             )}
 
             {/* Profile Header */}
             <div style={{
                 background: 'white',
-                borderRadius: '32px',
-                padding: '3rem 4rem',
+                borderRadius: '24px',
+                padding: isMobile ? '2rem 1.5rem' : '3rem',
                 border: '1px solid #f1f5f9',
                 display: 'flex',
-                alignItems: 'center',
-                gap: '3rem',
-                position: 'relative',
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'center' : 'center',
+                textAlign: isMobile ? 'center' : 'left',
+                gap: isMobile ? '1.5rem' : '2.5rem',
                 boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)'
             }}>
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                     <div style={{
-                        width: '140px',
-                        height: '140px',
+                        width: isMobile ? '100px' : '120px',
+                        height: isMobile ? '100px' : '120px',
                         borderRadius: '50%',
                         background: 'linear-gradient(45deg, #1e3a8a, #3b82f6)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '3rem',
+                        fontSize: isMobile ? '2.2rem' : '2.8rem',
                         fontWeight: 900,
                         color: 'white',
-                        border: '6px solid #f8fafc'
+                        border: '4px solid #f8fafc',
+                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
                     }}>
                         {formData.name?.split(' ').map(n => n[0]).join('') || 'U'}
-                        <div style={{
-                            position: 'absolute',
-                            bottom: '8px',
-                            right: '8px',
-                            width: '28px',
-                            height: '28px',
-                            background: '#22c55e',
-                            border: '4px solid white',
-                            borderRadius: '50%'
-                        }} />
                     </div>
                 </div>
 
                 <div style={{ flex: 1 }}>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#1e3a8a', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>{formData.name || 'Set your name'}</h1>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', color: '#64748b' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                            <Briefcase size={18} /> {formData.career || 'Career not set'}
+                    <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 900, color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+                        {formData.name || (isOwnProfile ? 'Set your name' : 'Unknown User')}
+                    </h1>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: isMobile ? 'center' : 'flex-start',
+                        gap: isMobile ? '1rem' : '1.5rem',
+                        color: '#64748b',
+                        flexWrap: 'wrap'
+                    }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, fontSize: '0.9rem' }}>
+                            <Briefcase size={16} /> {formData.career || 'Title not set'}
                         </span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                            <MapPin size={18} /> {formData.location || 'Location not set'}
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, fontSize: '0.9rem' }}>
+                            <MapPin size={16} /> {formData.location || 'Location not set'}
                         </span>
                     </div>
                 </div>
             </div>
 
-            {/* Profile Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-
-                {/* Basic Information */}
-                <section style={{ background: 'white', borderRadius: '24px', padding: '2.5rem', border: '1px solid #f1f5f9' }}>
-                    <SectionHeader title="Basic Information" section="basic" editing={isEditing.basic} />
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
-                            {isEditing.basic ? (
+            {/* Basic Information */}
+            <section style={{ background: 'white', borderRadius: '24px', padding: isMobile ? '1.5rem' : '2.5rem', border: '1px solid #f1f5f9' }}>
+                <SectionHeader title="Account Details" section="basic" editing={isEditing.basic} />
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                    {[
+                        { label: 'Full Name', value: formData.name, key: 'name' },
+                        { label: 'Professional Title', value: formData.career, key: 'career' },
+                        { label: 'Location', value: formData.location, key: 'location' },
+                        { label: 'Email', value: currentProfile?.email, readonly: true }
+                    ].map((field, i) => (
+                        <div key={i}>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{field.label}</label>
+                            {isEditing.basic && !field.readonly ? (
                                 <input
                                     type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none' }}
+                                    value={field.value}
+                                    onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none', fontSize: '0.95rem' }}
                                 />
                             ) : (
-                                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.05rem' }}>{formData.name || 'Not provided'}</p>
+                                <p style={{ fontWeight: 700, color: field.readonly ? '#94a3b8' : '#1e293b', fontSize: '1rem' }}>{field.value || 'Not provided'}</p>
                             )}
                         </div>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Professional Title</label>
-                            {isEditing.basic ? (
-                                <input
-                                    type="text"
-                                    value={formData.career}
-                                    onChange={(e) => setFormData({ ...formData, career: e.target.value })}
-                                    style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none' }}
-                                />
-                            ) : (
-                                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.05rem' }}>{formData.career || 'Not provided'}</p>
-                            )}
-                        </div>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location</label>
-                            {isEditing.basic ? (
-                                <input
-                                    type="text"
-                                    value={formData.location}
-                                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                    style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none' }}
-                                />
-                            ) : (
-                                <p style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.05rem' }}>{formData.location || 'Not provided'}</p>
-                            )}
-                        </div>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
-                            <p style={{ fontWeight: 700, color: '#94a3b8', fontSize: '1.05rem' }}>{user?.email}</p>
-                        </div>
-                    </div>
-                </section>
+                    ))}
+                </div>
+            </section>
 
-                {/* About Me */}
-                <section style={{ background: 'white', borderRadius: '24px', padding: '2.5rem', border: '1px solid #f1f5f9' }}>
-                    <SectionHeader title="About Me" section="about" editing={isEditing.about} />
-                    {isEditing.about ? (
-                        <textarea
-                            value={formData.bio}
-                            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                            rows={5}
-                            style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 500, outline: 'none', lineHeight: 1.6, resize: 'vertical' }}
-                            placeholder="Tell us about yourself..."
-                        />
-                    ) : (
-                        <p style={{ color: '#475569', lineHeight: 1.8, fontWeight: 500, fontSize: '1rem' }}>
-                            {formData.bio || 'Add a bio to let others know more about you.'}
-                        </p>
-                    )}
-                </section>
+            {/* About Me */}
+            <section style={{ background: 'white', borderRadius: '24px', padding: isMobile ? '1.5rem' : '2.5rem', border: '1px solid #f1f5f9' }}>
+                <SectionHeader title="About Me" section="about" editing={isEditing.about} />
+                {isEditing.about ? (
+                    <textarea
+                        value={formData.bio}
+                        onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                        rows={5}
+                        style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none', lineHeight: 1.6, resize: 'none', fontSize: '1rem' }}
+                        placeholder="Share your experience and what you're looking for..."
+                    />
+                ) : (
+                    <p style={{ color: '#475569', lineHeight: 1.7, fontWeight: 500, fontSize: '1rem' }}>
+                        {formData.bio || 'Add a bio to let others know more about your journey.'}
+                    </p>
+                )}
+            </section>
+
+            {/* Goals & Interests (Grid on desktop, stack on mobile) */}
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1.5rem' : '2rem' }}>
 
                 {/* Goals */}
-                <section style={{ background: 'white', borderRadius: '24px', padding: '2.5rem', border: '1px solid #f1f5f9' }}>
-                    <SectionHeader title="Career Goals" section="goals" editing={isEditing.goals} />
-
-                    <div style={{ background: '#f8fafc', padding: '2rem', borderRadius: '20px' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {formData.goals.map((goal, i) => (
-                                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'white', padding: '1rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#1e293b', fontWeight: 600 }}>
-                                        <div style={{ width: '8px', height: '8px', background: '#2563eb', borderRadius: '50%' }} />
-                                        {goal}
-                                    </div>
-                                    {isEditing.goals && (
-                                        <button onClick={() => removeGoal(i)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}>
-                                            <X size={18} />
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
-                            {isEditing.goals && (
-                                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                                    <input
-                                        type="text"
-                                        placeholder="Add a new goal..."
-                                        value={tempGoal}
-                                        onChange={(e) => setTempGoal(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && addGoal()}
-                                        style={{ flex: 1, padding: '0.8rem 1.25rem', borderRadius: '10px', border: '1px solid #e2e8f0', outline: 'none', fontWeight: 600 }}
-                                    />
-                                    <button onClick={addGoal} style={{ padding: '0.8rem 1.5rem', background: '#1e3a8a', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
-                                        Add
-                                    </button>
-                                </div>
-                            )}
-                            {formData.goals.length === 0 && !isEditing.goals && (
-                                <p style={{ textAlign: 'center', color: '#94a3b8', fontStyle: 'italic', margin: '1rem 0' }}>No goals listed.</p>
-                            )}
-                        </div>
+                <section style={{ background: 'white', borderRadius: '24px', padding: isMobile ? '1.5rem' : '2rem', border: '1px solid #f1f5f9' }}>
+                    <SectionHeader title="Goals" section="goals" editing={isEditing.goals} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {formData.goals.map((goal, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', padding: '0.8rem 1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                                <p style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1e293b' }}>{goal}</p>
+                                {isEditing.goals && <X size={16} onClick={() => removeGoal(i)} style={{ color: '#ef4444', cursor: 'pointer' }} />}
+                            </div>
+                        ))}
+                        {isEditing.goals && (
+                            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                <input
+                                    type="text"
+                                    value={tempGoal}
+                                    onChange={(e) => setTempGoal(e.target.value)}
+                                    placeholder="Add goal..."
+                                    style={{ flex: 1, padding: '0.6rem 0.8rem', borderRadius: '8px', border: '1px solid #e2e8f0', outline: 'none' }}
+                                />
+                                <button onClick={addGoal} style={{ padding: '0.6rem 1rem', background: '#1e3a8a', color: 'white', borderRadius: '8px', border: 'none', fontWeight: 700 }}>Add</button>
+                            </div>
+                        )}
                     </div>
                 </section>
 
-                {/* Areas of Interest */}
-                <section style={{ background: 'white', borderRadius: '24px', padding: '2.5rem', border: '1px solid #f1f5f9' }}>
-                    <SectionHeader title="Areas of Interest" section="interests" editing={isEditing.interests} />
-
-                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                {/* Interests */}
+                <section style={{ background: 'white', borderRadius: '24px', padding: isMobile ? '1.5rem' : '2rem', border: '1px solid #f1f5f9' }}>
+                    <SectionHeader title="Interests" section="interests" editing={isEditing.interests} />
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                         {formData.interests.map((interest, i) => (
-                            <div key={i} style={{
-                                padding: '0.7rem 1.25rem',
-                                background: '#eff6ff',
-                                color: '#2563eb',
-                                borderRadius: '100px',
-                                fontSize: '0.9rem',
-                                fontWeight: 800,
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                border: '1px solid rgba(37, 99, 235, 0.1)'
-                            }}>
+                            <div key={i} style={{ padding: '0.5rem 1rem', background: '#eff6ff', color: '#1e3a8a', borderRadius: '100px', fontSize: '0.85rem', fontWeight: 700, border: '1px solid #dbeafe', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 {interest}
-                                {isEditing.interests && (
-                                    <button onClick={() => removeInterest(i)} style={{ background: 'transparent', border: 'none', color: '#2563eb', cursor: 'pointer', display: 'flex', pdding: 0 }}>
-                                        <X size={14} />
-                                    </button>
-                                )}
+                                {isEditing.interests && <X size={14} onClick={() => removeInterest(i)} style={{ cursor: 'pointer' }} />}
                             </div>
                         ))}
                         {isEditing.interests && (
-                            <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem' }}>
                                 <input
                                     type="text"
-                                    placeholder="Add an interest (e.g. AI, Fintech)..."
                                     value={tempInterest}
                                     onChange={(e) => setTempInterest(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && addInterest()}
-                                    style={{ flex: 1, padding: '0.8rem 1.25rem', borderRadius: '10px', border: '1px solid #e2e8f0', outline: 'none', fontWeight: 600 }}
+                                    placeholder="Add interest..."
+                                    style={{ flex: 1, padding: '0.6rem 0.8rem', borderRadius: '8px', border: '1px solid #e2e8f0', outline: 'none' }}
                                 />
-                                <button onClick={addInterest} style={{ padding: '0.8rem 1.5rem', background: '#1e3a8a', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
-                                    Add
-                                </button>
+                                <button onClick={addInterest} style={{ padding: '0.6rem 1rem', background: '#1e3a8a', color: 'white', borderRadius: '8px', border: 'none', fontWeight: 700 }}>Add</button>
                             </div>
-                        )}
-                        {formData.interests.length === 0 && !isEditing.interests && (
-                            <p style={{ width: '100%', textAlign: 'center', color: '#94a3b8', fontStyle: 'italic' }}>No interests listed.</p>
                         )}
                     </div>
                 </section>
-
             </div>
         </div>
     );

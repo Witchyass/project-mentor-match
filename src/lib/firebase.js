@@ -13,16 +13,8 @@ export const firebaseConfig = {
   databaseURL: "https://mentormatch-3e893-default-rtdb.firebaseio.com/"
 };
 
-console.log("Initializing Firebase with DB URL:", firebaseConfig.databaseURL);
-
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app, firebaseConfig.databaseURL);
-
-// Debugging
-if (typeof window !== 'undefined') {
-  window.db = db;
-  window.auth = auth;
-}
 
 export default app;

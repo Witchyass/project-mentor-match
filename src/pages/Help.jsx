@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { HelpCircle, ChevronDown, Search, MessageSquare, Zap, Shield, Mail, ArrowRight } from 'lucide-react';
@@ -6,80 +6,59 @@ import { HelpCircle, ChevronDown, Search, MessageSquare, Zap, Shield, Mail, Arro
 const HelpPage = () => {
     const [activeId, setActiveId] = useState(null);
     const [search, setSearch] = useState('');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const faqs = [
-        {
-            id: 1,
-            q: "How does the AI matching work?",
-            a: "Our AI analyzes over 20+ data points including your skills, career aspirations, and communication style to calculate a compatibility score with potential mentors, ensuring an outcome-focused match.",
-            category: "Platform"
-        },
-        {
-            id: 2,
-            q: "Can I switch between being a mentor and a mentee?",
-            a: "Yes! During signup you select a primary role, but your profile allows you to offer mentorship in areas of strength while seeking mentorship in areas of growth.",
-            category: "Account"
-        },
-        {
-            id: 3,
-            q: "How are mentors verified?",
-            a: "All mentors go through a background verification process, including LinkedIn profile validation and sometimes a brief screening call to ensure the highest quality of guidance.",
-            category: "Safety"
-        },
-        {
-            id: 4,
-            q: "Is there a limit on messaging?",
-            a: "Once you match, messaging is unlimited. We encourage you to use our AI Ice Breakers to get the conversation started effectively.",
-            category: "Messaging"
-        }
+        { id: 1, q: "How does the AI matching work?", a: "Our AI analyzes over 20+ data points including your skills, career aspirations, and communication style to calculate a compatibility score." },
+        { id: 2, q: "Can I switch roles?", a: "Yes! You can seek mentorship while offering it in other areas." },
+        { id: 3, q: "Are mentors verified?", a: "All mentors go through a background verification process including LinkedIn validation." },
+        { id: 4, q: "Is there a messaging limit?", a: "Once you match, messaging is unlimited." }
     ];
 
     const filteredFaqs = faqs.filter(f => f.q.toLowerCase().includes(search.toLowerCase()));
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%' }}>
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <div style={{ width: '64px', height: '64px', background: 'var(--glass)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--primary)' }}>
-                    <HelpCircle size={32} />
+        <div style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '3rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: isMobile ? '2rem' : '3.5rem' }}>
+                <div style={{ width: '56px', height: '56px', background: '#eff6ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', color: '#1e3a8a' }}>
+                    <HelpCircle size={28} />
                 </div>
-                <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem' }}>How can we help?</h1>
-                <p style={{ opacity: 0.6 }}>Find answers to common questions about Mentor Match.</p>
+                <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.8rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em' }}>How can we help?</h1>
+                <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '0.95rem' }}>Find answers to common questions about Mentor Match.</p>
             </div>
 
-            <div style={{ position: 'relative', marginBottom: '4rem' }}>
-                <Search size={20} style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} />
+            <div style={{ position: 'relative', marginBottom: isMobile ? '1.5rem' : '2.5rem' }}>
+                <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                 <input
-                    className="glass"
-                    placeholder="Search for questions..."
+                    placeholder="Search help topics..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    style={{ width: '100%', padding: '1.25rem 1.25rem 1.25rem 3.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', fontSize: '1.125rem', color: 'inherit' }}
+                    style={{ width: '100%', padding: '0.8rem 1rem 0.8rem 2.8rem', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '1rem', outline: 'none' }}
                 />
             </div>
 
-            <div style={{ display: 'grid', gap: '1rem', marginBottom: '6rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '3rem' }}>
                 {filteredFaqs.map(faq => (
-                    <div key={faq.id} className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+                    <div key={faq.id} style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
                         <button
                             onClick={() => setActiveId(activeId === faq.id ? null : faq.id)}
-                            style={{ width: '100%', padding: '1.5rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'transparent', border: 'none', color: 'inherit', cursor: 'pointer', textAlign: 'left' }}
+                            style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}
                         >
-                            <span style={{ fontWeight: 700, fontSize: '1.125rem' }}>{faq.q}</span>
+                            <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b', flex: 1 }}>{faq.q}</span>
                             <motion.div animate={{ rotate: activeId === faq.id ? 180 : 0 }}>
-                                <ChevronDown opacity={0.5} />
+                                <ChevronDown size={18} color="#94a3b8" />
                             </motion.div>
                         </button>
                         <AnimatePresence>
                             {activeId === faq.id && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <div style={{ padding: '0 2rem 1.5rem', opacity: 0.7, lineHeight: 1.7 }}>
-                                        {faq.a}
-                                    </div>
+                                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                                    <div style={{ padding: '0 1.25rem 1.25rem', color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{faq.a}</div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -87,17 +66,12 @@ const HelpPage = () => {
                 ))}
             </div>
 
-            {/* Support CTA */}
-            <div className="glass" style={{ padding: '3rem', borderRadius: 'var(--radius-xl)', textAlign: 'center', background: 'var(--gradient-premium)', border: 'none' }}>
-                <h2 style={{ color: 'white', marginBottom: '1rem' }}>Still have questions?</h2>
-                <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '2rem' }}>Our support team is available 24/7 to help you along your journey.</p>
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                    <button className="btn" style={{ background: 'white', color: 'var(--primary)' }}>
-                        <Mail size={18} /> Contact Support
-                    </button>
-                    <Link to="/#success-stories" className="btn" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        See Success Stories <ArrowRight size={18} />
-                    </Link>
+            <div style={{ background: '#1e3a8a', padding: isMobile ? '2rem' : '3rem', borderRadius: '24px', textAlign: 'center', color: 'white' }}>
+                <h2 style={{ fontSize: isMobile ? '1.3rem' : '1.75rem', fontWeight: 800, marginBottom: '0.75rem' }}>Still need help?</h2>
+                <p style={{ opacity: 0.8, fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '500px', margin: '0 auto 2rem' }}>Our support team is ready to assist you on your mentorship journey.</p>
+                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '1rem', justifyContent: 'center' }}>
+                    <button className="btn" style={{ background: 'white', color: '#1e3a8a', padding: '0.8rem 1.5rem', borderRadius: '10px' }}>Contact Support</button>
+                    <Link to="/#success-stories" style={{ color: 'white', fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>Success Stories <ArrowRight size={16} /></Link>
                 </div>
             </div>
         </div>

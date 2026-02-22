@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { ref, get, child, update, onValue } from 'firebase/database';
+import logger from '../utils/logger';
 
 const AuthContext = createContext();
 
@@ -16,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         let profileUnsubscribe = null;
 
         const authUnsubscribe = onAuthStateChanged(auth, async (authUser) => {
-            console.log("Auth State Changed: ", authUser?.email);
+            logger.debug("Auth State Changed");
             setUser(authUser);
 
             // Clear previous profile listener if any
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
                 profileUnsubscribe = onValue(profileRef, async (snapshot) => {
                     if (snapshot.exists()) {
                         const data = snapshot.val();
-                        console.log("Profile updated/found:", data.name);
+                        logger.debug("Profile updated/found");
 
                         // SELF-HEALING: Repair profile if missing key fields (without causing loop)
                         if (!data.email || !data.id) {
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }) => {
                             setLoading(false);
                         }
                     } else {
-                        console.log("No profile record found for:", authUser.email);
+                        logger.debug("No profile record found");
                         setProfile(null);
                         setLoading(false);
                     }

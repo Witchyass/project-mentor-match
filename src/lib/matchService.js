@@ -1,5 +1,6 @@
 import { db } from './firebase';
 import { ref, push, set, serverTimestamp, onValue, get, update } from 'firebase/database';
+import logger from '../utils/logger';
 
 /**
  * Sends a match request from a mentee to a mentor.
@@ -12,11 +13,11 @@ export const sendMatchRequest = async (fromUser, fromProfile, toUserId) => {
     }
 
     let normalizedToId = toUserId.trim();
-    console.log(`🤝 sendMatchRequest: Initiating from ${fromUser.uid} to ${normalizedToId}`);
+    logger.debug("sendMatchRequest: Initiated");
 
     // IDENTITY BRIDGE: If toUserId is a push-ID, try to find the real Auth UID for this user
     if (normalizedToId.startsWith('-')) {
-        console.log("🔍 Identity Bridge: Detected push-ID. Attempting to find real UID...");
+        logger.debug("Identity Bridge: Checking push-ID");
         try {
             const usersRef = ref(db, 'users');
             const snapshot = await get(usersRef);
@@ -32,10 +33,10 @@ export const sendMatchRequest = async (fromUser, fromProfile, toUserId) => {
                     );
 
                     if (realUid) {
-                        console.log(`✨ Identity Bridge: Resolved ${normalizedToId} to real UID ${realUid}`);
+                        logger.debug("Identity Bridge: Resolved UID");
                         normalizedToId = realUid;
                     } else {
-                        console.log("ℹ️ Identity Bridge: No real UID found for this email yet.");
+                        logger.debug("Identity Bridge: No resolution");
                     }
                 }
             }
@@ -103,13 +104,8 @@ export const sendMatchRequest = async (fromUser, fromProfile, toUserId) => {
     };
 
     try {
-        console.log("📤 Diagnostic: Attempting atomic update at paths:", Object.keys(updates));
-        console.log("📦 Diagnostic: Full update data:", updates);
         await update(ref(db), updates);
-        console.log("✅ Match request and notification successfully sent!");
-        console.log("✅ Request ID:", requestId);
-        console.log("✅ Notification sent to mentor:", toUserId);
-        console.log("✅ Notification key:", newNotifRef.key);
+        logger.log("Match request successfully sent");
         return { success: true, requestId };
     } catch (error) {
         console.error("❌ Firebase update failed for match request:", error);
@@ -132,7 +128,7 @@ export const acceptMatchRequest = async (request, mentorProfile) => {
     const mentorName = mentorProfile?.name || 'A mentor';
     const menteeId = request.from;
 
-    console.log(`Accepting match request ${request.id} from mentee ${menteeId}`);
+    logger.debug("Accepting match request");
 
     // Create match and update request
     const updates = {};
@@ -179,10 +175,9 @@ export const acceptMatchRequest = async (request, mentorProfile) => {
         timestamp: serverTimestamp()
     };
 
-    console.log("Acceptance updates prepared:", updates);
     try {
         await update(ref(db), updates);
-        console.log("Acceptance updates successful!");
+        logger.log("Acceptance updates successful");
         return { success: true, matchId };
     } catch (error) {
         console.error("Firebase update failed during acceptance:", error);
@@ -202,7 +197,7 @@ export const sendMessageNotification = async (fromUser, fromProfile, toUserId, m
     const notifRef = ref(db, `notifications/${toUserId}`);
     const newNotifRef = push(notifRef);
 
-    console.log(`Sending message notification to ${toUserId} from ${fromUser.uid}`);
+    logger.debug("Sending message notification");
 
     try {
         await set(newNotifRef, {
@@ -213,7 +208,7 @@ export const sendMessageNotification = async (fromUser, fromProfile, toUserId, m
             read: false,
             timestamp: serverTimestamp()
         });
-        console.log("✅ Message notification sent successfully");
+        logger.debug("Message notification sent");
         return { success: true };
     } catch (error) {
         console.error("❌ Failed to send message notification:", error);
@@ -228,31 +223,19 @@ export const subscribeToNotifications = (userId, callback) => {
     }
 
     const notifRef = ref(db, `notifications/${userId}`);
-    console.log(`🔔 Setting up notification subscription for user: ${userId}`);
+    logger.debug("Setting up notification subscription");
 
     return onValue(notifRef, (snapshot) => {
         if (snapshot.exists()) {
-            const data = snapshot.val();
-            console.log(`🔔 Diagnostic: Raw notifications data for ${userId}:`, data);
-
-            // Handle both object and array formats
-            const list = Object.keys(data).map(key => {
-                const notif = { id: key, ...data[key] };
-                if (!notif.read) {
-                    console.log(`  🔴 Unread: id=${notif.id} type=${notif.type} from=${notif.fromId || 'system'}`);
-                } else {
-                    console.log(`  ⚪ Read: id=${notif.id} type=${notif.type}`);
-                }
-                return notif;
-            }).sort((a, b) => {
-                const timeA = (a.timestamp && typeof a.timestamp === 'number') ? a.timestamp : 0;
-                const timeB = (b.timestamp && typeof b.timestamp === 'number') ? b.timestamp : 0;
-                return timeB - timeA;
-            });
-            console.log(`✅ Sending ${list.length} notifications to callback for user ${userId}`);
+            const list = Object.keys(data).map(key => ({ id: key, ...data[key] }))
+                .sort((a, b) => {
+                    const timeA = (a.timestamp && typeof a.timestamp === 'number') ? a.timestamp : 0;
+                    const timeB = (b.timestamp && typeof b.timestamp === 'number') ? b.timestamp : 0;
+                    return timeB - timeA;
+                });
+            logger.debug("Notifications received");
             callback(list);
         } else {
-            console.log(`⚠️ No notifications found for user ${userId}`);
             callback([]);
         }
     }, (error) => {
@@ -282,7 +265,7 @@ export const declineMatchRequest = async (requestId, mentorProfile, customMessag
     const requestData = snapshot.val();
     const menteeId = requestData.from;
 
-    console.log(`Declining match request ${requestId} from mentee ${menteeId}`);
+    logger.debug("Declining match request");
 
     const updates = {};
     // Update request status
@@ -310,7 +293,7 @@ export const declineMatchRequest = async (requestId, mentorProfile, customMessag
 
     try {
         await update(ref(db), updates);
-        console.log("Request declined and notification sent successfully!");
+        logger.log("Request declined successfully");
         return { success: true };
     } catch (error) {
         console.error("Firebase update failed during decline:", error);

@@ -7,6 +7,7 @@ import DashboardHeader from './DashboardHeader';
 const Layout = ({ children }) => {
     const location = useLocation();
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
     // Define paths that use the dashboard layout
     const dashboardPaths = [
@@ -18,26 +19,54 @@ const Layout = ({ children }) => {
     const isDashboard = dashboardPaths.some(path => location.pathname.startsWith(path));
 
     const toggleSidebar = () => {
-        setSidebarCollapsed(!sidebarCollapsed);
+        if (window.innerWidth <= 768) {
+            setIsMobileSidebarOpen(!isMobileSidebarOpen);
+        } else {
+            setSidebarCollapsed(!sidebarCollapsed);
+        }
     };
+
+    // Close mobile sidebar on navigation
+    React.useEffect(() => {
+        setIsMobileSidebarOpen(false);
+    }, [location.pathname]);
 
     if (isDashboard) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', background: '#f8fafc', overflowX: 'hidden' }}>
-                <Sidebar collapsed={sidebarCollapsed} />
+            <div style={{ minHeight: '100vh', display: 'flex', background: '#f8fafc', overflowX: 'hidden', position: 'relative' }}>
+                {/* Mobile Overlay */}
+                {isMobileSidebarOpen && (
+                    <div
+                        onClick={() => setIsMobileSidebarOpen(false)}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(4px)',
+                            zIndex: 95,
+                            transition: '0.3s'
+                        }}
+                    />
+                )}
+
+                <Sidebar
+                    collapsed={sidebarCollapsed}
+                    isMobileOpen={isMobileSidebarOpen}
+                    onCloseMobile={() => setIsMobileSidebarOpen(false)}
+                />
                 <div style={{
                     flex: 1,
-                    marginLeft: sidebarCollapsed ? '80px' : '280px',
+                    marginLeft: window.innerWidth <= 768 ? '0' : (sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'),
                     display: 'flex',
                     flexDirection: 'column',
-                    transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    width: `calc(100% - ${sidebarCollapsed ? '80px' : '280px'})`
+                    transition: 'var(--transition)',
+                    width: window.innerWidth <= 768 ? '100%' : `calc(100% - ${sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'})`
                 }}>
                     <DashboardHeader onToggleSidebar={toggleSidebar} isSidebarCollapsed={sidebarCollapsed} />
                     <main style={{
                         flex: 1,
-                        padding: '2.5rem 3rem',
-                        maxWidth: '1600px',
+                        padding: window.innerWidth <= 768 ? '1.5rem 1rem' : '2.5rem 3rem',
+                        maxWidth: 'var(--max-content-width)',
                         width: '100%',
                         margin: '0 auto'
                     }}>

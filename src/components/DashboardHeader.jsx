@@ -20,11 +20,11 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
 
     return (
         <header style={{
-            height: '72px',
+            height: 'var(--header-height)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 2.5rem',
+            padding: window.innerWidth <= 768 ? '0 1rem' : '0 2.5rem',
             background: 'white',
             borderBottom: '1px solid #f1f5f9',
             position: 'sticky',
@@ -32,9 +32,10 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
             zIndex: 90
         }}>
             {/* Left: hamburger + logo */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button
                     onClick={onToggleSidebar}
+                    className="animate-hover"
                     style={{
                         background: '#f8fafc',
                         border: 'none',
@@ -50,8 +51,14 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
                 >
                     <Menu size={22} />
                 </button>
-                <div style={{ opacity: isSidebarCollapsed ? 1 : 0, transition: '0.3s', pointerEvents: 'none' }}>
-                    <Logo size={20} />
+                <div style={{
+                    opacity: (isSidebarCollapsed || window.innerWidth <= 768) ? 1 : 0,
+                    transition: '0.3s',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    alignItems: 'center'
+                }}>
+                    <Logo size={20} showText={window.innerWidth > 380} />
                 </div>
             </div>
 
@@ -103,7 +110,7 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
 
                 {/* User info + avatar */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ textAlign: 'right' }}>
+                    <div style={{ textAlign: 'right', display: window.innerWidth <= 768 ? 'none' : 'block' }}>
                         <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>{profile?.name || 'User'}</p>
                         <p style={{ fontSize: '0.7rem', color: '#64748b', margin: 0, textTransform: 'capitalize' }}>{profile?.role || 'Member'}</p>
                     </div>

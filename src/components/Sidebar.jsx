@@ -16,7 +16,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
 
-const Sidebar = ({ collapsed }) => {
+const Sidebar = ({ collapsed, isMobileOpen, onCloseMobile }) => {
     const { profile, logout } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -29,6 +29,8 @@ const Sidebar = ({ collapsed }) => {
             console.error("Failed to log out", error);
         }
     };
+
+    const isMobile = window.innerWidth <= 768;
 
     const mentorItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={22} />, path: '/dashboard' },
@@ -56,21 +58,24 @@ const Sidebar = ({ collapsed }) => {
 
     return (
         <aside style={{
-            width: collapsed ? '80px' : '280px',
+            width: isMobile ? 'calc(100% - 60px)' : (collapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'),
+            maxWidth: '300px',
             background: 'white',
             borderRight: '1px solid #f1f5f9',
             display: 'flex',
             flexDirection: 'column',
-            padding: collapsed ? '1.5rem 0.75rem' : '1.5rem',
+            padding: (collapsed && !isMobile) ? '1.5rem 0.75rem' : '1.5rem',
             height: '100vh',
             position: 'fixed',
-            left: 0,
+            left: isMobile ? (isMobileOpen ? '0' : '-100%') : '0',
             top: 0,
             zIndex: 100,
-            transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'var(--transition)',
             overflowY: 'auto',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
+            boxShadow: isMobile && isMobileOpen ? '20px 0 50px rgba(0,0,0,0.1)' : 'none'
         }}>
+
             {/* Logo */}
             <div style={{
                 marginBottom: '2.5rem',

@@ -29,7 +29,7 @@ export const findActiveSession = async (userId1, userId2) => {
 /**
  * Creates a new session between mentor and mentee
  */
-export const createSession = async (mentorId, menteeId, mentorProfile, menteeProfile, dateTime, duration = 60) => {
+export const createSession = async (mentorId, menteeId, mentorProfile, menteeProfile, dateTime, duration = 60, topic = '') => {
     if (!mentorId || !menteeId || !dateTime) {
         throw new Error("Missing required session data");
     }
@@ -53,7 +53,7 @@ export const createSession = async (mentorId, menteeId, mentorProfile, menteePro
         status: 'scheduled', // scheduled, completed, cancelled
         createdAt: serverTimestamp(),
         reminders: true,
-        topic: mentorProfile?.expectedTopic || ''
+        topic: topic || mentorProfile?.expectedTopic || 'Strategy Session'
     };
 
     const updates = {};
@@ -283,7 +283,7 @@ export const cancelSession = async (sessionId, userId, userName) => {
 /**
  * Reschedule an existing session
  */
-export const rescheduleSession = async (oldSessionId, newDateTime, initiatorProfile) => {
+export const rescheduleSession = async (oldSessionId, newDateTime, initiatorProfile, newTopic = '') => {
     const sessionRef = ref(db, `sessions/${oldSessionId}`);
     const snapshot = await get(sessionRef);
 
@@ -325,7 +325,7 @@ export const rescheduleSession = async (oldSessionId, newDateTime, initiatorProf
         meetLink,
         status: 'scheduled',
         createdAt: serverTimestamp(),
-        topic: topic || '',
+        topic: newTopic || topic || 'Strategy Session',
         rescheduledFrom: oldSessionId
     };
 

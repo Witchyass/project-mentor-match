@@ -67,7 +67,13 @@ const MentorOnlyRoute = ({ children }) => {
   return children;
 };
 
+import logger from './utils/logger';
+
 function App() {
+  React.useEffect(() => {
+    logger.brand();
+  }, []);
+
   return (
     <Router>
       <AuthProvider>
