@@ -297,7 +297,7 @@ export const declineMatchRequest = async (requestId, mentorProfile, customMessag
 
     updates[`notifications/${menteeId}/${newMenteeNotifRef.key}`] = {
         id: newMenteeNotifRef.key,
-        text: `${mentorName} sent you a message regarding your match request.`,
+        text: `${mentorName} shared some thoughts regarding your match request.`,
         type: 'match_declined',
         requestId: requestId,
         rejectionMessage: customMessage,

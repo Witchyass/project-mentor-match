@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     const handleAcceptRequest = async (request) => {
         try {
-            await acceptMatchRequest(request);
+            await acceptMatchRequest(request, profile);
             alert(`Match request from ${request.fromName} accepted!`);
         } catch (error) {
             console.error("Error accepting request:", error);
@@ -83,7 +83,7 @@ const Dashboard = () => {
     const handleDeclineRequest = async (reason) => {
         if (!selectedRequest) return;
         try {
-            await declineMatchRequest(selectedRequest, reason);
+            await declineMatchRequest(selectedRequest.id, profile, reason);
             setIsDeclineModalOpen(false);
             setSelectedRequest(null);
             alert("Request declined.");
@@ -263,7 +263,7 @@ const Dashboard = () => {
                         {upcomingSessions.length === 0 ? (
                             <div style={{ background: 'white', padding: '3rem', borderRadius: '24px', border: '1px dashed #cbd5e1', textAlign: 'center' }}>
                                 <p style={{ color: '#64748b', fontWeight: 600 }}>No upcoming sessions scheduled.</p>
-                                <button onClick={() => navigate(isMentor ? '/sessions' : '/matcher')} style={{ marginTop: '1rem', background: '#1e3a8a', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
+                                <button onClick={() => navigate(isMentor ? '/sessions' : '/discover')} style={{ marginTop: '1rem', background: '#1e3a8a', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
                                     {isMentor ? 'Set Availability' : 'Find a Mentor'}
                                 </button>
                             </div>

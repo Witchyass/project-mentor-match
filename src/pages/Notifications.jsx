@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Check, X, User, MessageCircle, Sparkles, Clock, Inbox, Filter, Heart, ChevronLeft } from 'lucide-react';
+import { Bell, Check, X, User, MessageCircle, Sparkles, Clock, Inbox, Filter, Heart, ChevronLeft, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToNotifications, markNotificationAsRead, acceptMatchRequest, declineMatchRequest } from '../lib/matchService';
 import DeclineRequestModal from '../components/DeclineRequestModal';
@@ -187,18 +187,18 @@ const Notifications = () => {
                                 <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
                                     <div style={{
                                         width: '48px', height: '48px', borderRadius: '12px',
-                                        background: notif.type === 'match_request' ? '#eff6ff' : notif.type === 'new_message' ? '#fdf2f8' : '#f0fdf4',
+                                        background: notif.type === 'match_request' ? '#eff6ff' : notif.type === 'new_message' ? '#fdf2f8' : notif.type === 'match_declined' ? '#f0f9ff' : '#f0fdf4',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        color: notif.type === 'match_request' ? '#3b82f6' : notif.type === 'new_message' ? '#db2777' : '#16a34a',
+                                        color: notif.type === 'match_request' ? '#3b82f6' : notif.type === 'new_message' ? '#db2777' : notif.type === 'match_declined' ? '#0284c7' : '#16a34a',
                                         flexShrink: 0
                                     }}>
-                                        {notif.type === 'match_request' ? <User size={24} /> : notif.type === 'new_message' ? <MessageCircle size={24} /> : <Sparkles size={24} />}
+                                        {notif.type === 'match_request' ? <User size={24} /> : notif.type === 'new_message' ? <MessageCircle size={24} /> : notif.type === 'match_declined' ? <MessageCircle size={24} /> : <Sparkles size={24} />}
                                     </div>
 
                                     <div style={{ flex: 1 }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                                             <h4 style={{ fontWeight: 800, fontSize: '1rem', color: '#1e293b' }}>
-                                                {notif.type === 'match_request' ? 'Match Request' : notif.type === 'new_message' ? 'New Message' : 'Team Update'}
+                                                {notif.type === 'match_request' ? 'Match Request' : notif.type === 'new_message' ? 'New Message' : notif.type === 'match_declined' ? 'Mentor Connection Update' : 'Team Update'}
                                             </h4>
                                             <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>{formatTimestamp(notif.timestamp, Date.now())}</span>
                                         </div>
@@ -208,12 +208,30 @@ const Notifications = () => {
 
                                 {notif.type === 'match_request' && (
                                     <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
-                                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                            <img src={notif.menteeDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${notif.fromId}`} style={{ width: '40px', height: '40px', borderRadius: '10px' }} alt="" />
-                                            <div>
-                                                <div style={{ fontWeight: 800, color: '#1e3a8a', fontSize: '0.9rem' }}>{notif.menteeDetails?.name || 'Potential Match'}</div>
-                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{notif.menteeDetails?.career}</div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                                                <img src={notif.menteeDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${notif.fromId}`} style={{ width: '40px', height: '40px', borderRadius: '10px' }} alt="" />
+                                                <div>
+                                                    <div style={{ fontWeight: 800, color: '#1e3a8a', fontSize: '0.9rem' }}>{notif.menteeDetails?.name || 'Potential Match'}</div>
+                                                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{notif.menteeDetails?.career}</div>
+                                                </div>
                                             </div>
+                                            <button
+                                                onClick={() => navigate(`/profile/${notif.fromId}`)}
+                                                style={{
+                                                    background: 'transparent',
+                                                    border: 'none',
+                                                    color: '#3b82f6',
+                                                    fontWeight: 700,
+                                                    fontSize: '0.85rem',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '4px'
+                                                }}
+                                            >
+                                                View Profile <ArrowRight size={14} />
+                                            </button>
                                         </div>
                                         {dealtWith.has(notif.id) || notif.read ? (
                                             <div style={{ color: '#16a34a', fontWeight: 700, fontSize: '0.85rem' }}>Completed</div>
@@ -223,6 +241,35 @@ const Notifications = () => {
                                                 <button onClick={() => handleDismiss(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', color: '#64748b', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>Decline</button>
                                             </div>
                                         )}
+                                    </div>
+                                )}
+
+                                {notif.type === 'match_declined' && notif.rejectionMessage && (
+                                    <div style={{
+                                        background: '#f0f9ff',
+                                        padding: '1rem 1.25rem',
+                                        borderRadius: '16px',
+                                        border: '1px solid #e0f2fe',
+                                        marginTop: '0.5rem',
+                                        position: 'relative'
+                                    }}>
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '-8px',
+                                            left: '20px',
+                                            width: '16px',
+                                            height: '16px',
+                                            background: '#f0f9ff',
+                                            borderLeft: '1px solid #e0f2fe',
+                                            borderTop: '1px solid #e0f2fe',
+                                            transform: 'rotate(45deg)'
+                                        }}></div>
+                                        <div style={{ fontWeight: 700, color: '#0369a1', fontSize: '0.75rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            Advice & Feedback from {notif.mentorDetails?.name || 'Mentor'}
+                                        </div>
+                                        <p style={{ color: '#075985', fontSize: '0.9rem', fontWeight: 500, fontStyle: 'italic', lineHeight: 1.5 }}>
+                                            "{notif.rejectionMessage}"
+                                        </p>
                                     </div>
                                 )}
 
