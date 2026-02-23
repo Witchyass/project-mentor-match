@@ -87,7 +87,7 @@ const Landing = () => {
                         We use intelligent matching to connect you with mentors who understand your journey and help you achieve measurable growth.
                     </p>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-start' }}>
-                        <Link to="/login" style={{ padding: '1.1rem 2.8rem', fontSize: '1rem', background: '#1e3a8a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: 800, boxShadow: '0 10px 15px -3px rgba(30, 58, 138, 0.3)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Link to="/login?mode=signup" style={{ padding: '1.1rem 2.8rem', fontSize: '1rem', background: '#1e3a8a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: 800, boxShadow: '0 10px 15px -3px rgba(30, 58, 138, 0.3)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                             Get Started <ArrowRight size={18} />
                         </Link>
                     </div>
@@ -230,7 +230,7 @@ const Landing = () => {
                             <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>Top Rated Mentors</h2>
                             <p style={{ color: '#64748b', fontWeight: 500 }}>Learn from industry leaders at top tech companies.</p>
                         </div>
-                        <Link to="/login" style={{ color: '#1e3a8a', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Link to="/login?mode=signup" style={{ color: '#1e3a8a', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             View all mentors <ArrowRight size={18} />
                         </Link>
                     </div>
@@ -253,7 +253,7 @@ const Landing = () => {
                                         {[1, 2, 3, 4, 5].map(s => <Star key={s} size={14} fill="currentColor" />)}
                                         <span style={{ color: '#64748b', fontSize: '0.8rem', marginLeft: '0.5rem', fontWeight: 600 }}>5.0 ({m.reviews})</span>
                                     </div>
-                                    <Link to="/login" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', padding: '0.8rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#1e3a8a', fontWeight: 800 }}>View Profile</Link>
+                                    <Link to="/login?mode=signup" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', padding: '0.8rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#1e3a8a', fontWeight: 800 }}>View Profile</Link>
                                 </div>
                             </div>
                         ))}
@@ -325,8 +325,8 @@ const Landing = () => {
                     <div>
                         <h4 style={{ fontWeight: 800, marginBottom: '1.5rem', fontSize: '1rem' }}>Platform</h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <Link to="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Find a Mentor</Link>
-                            <Link to="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Become a Mentor</Link>
+                            <Link to="/login?mode=signup" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Find a Mentor</Link>
+                            <Link to="/login?mode=signup" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Become a Mentor</Link>
                         </div>
                     </div>
                     <div>

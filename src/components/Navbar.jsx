@@ -73,9 +73,9 @@ const Navbar = () => {
                 {/* Desktop Links */}
                 {!user && (
                     <div className="hide-mobile" style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
-                        <a href="#how-it-works" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600, fontSize: '0.9rem' }}>How it works</a>
-                        <a href="#qa" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600, fontSize: '0.9rem' }}>QA</a>
-                        <a href="#success-stories" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600, fontSize: '0.9rem' }}>Success stories</a>
+                        <Link to="/#how-it-works" style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 600, fontSize: '0.9rem' }}>How it works</Link>
+                        <Link to="/#qa" style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 600, fontSize: '0.9rem' }}>QA</Link>
+                        <Link to="/#success-stories" style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 600, fontSize: '0.9rem' }}>Success stories</Link>
                     </div>
                 )}
 
@@ -112,7 +112,7 @@ const Navbar = () => {
                         ) : (
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <Link to="/login" className="btn" style={{ background: 'var(--bg-tertiary)', color: 'var(--text)', padding: '0.6rem 1.5rem' }}>Login</Link>
-                                <Link to="/login" className="btn btn-primary" style={{ background: 'var(--primary-dark)', color: 'white', padding: '0.6rem 1.75rem' }}>Get Started</Link>
+                                <Link to="/login?mode=signup" className="btn btn-primary" style={{ background: 'var(--primary-dark)', color: 'white', padding: '0.6rem 1.75rem' }}>Get Started</Link>
                             </div>
                         )}
                     </div>
@@ -153,12 +153,12 @@ const Navbar = () => {
                 }}>
                     {!user ? (
                         <>
-                            <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 700, fontSize: '1.1rem' }}>How it works</a>
-                            <a href="#qa" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 700, fontSize: '1.1rem' }}>QA</a>
-                            <a href="#success-stories" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 700, fontSize: '1.1rem' }}>Success stories</a>
+                            <Link to="/#how-it-works" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 700, fontSize: '1.1rem' }}>How it works</Link>
+                            <Link to="/#qa" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 700, fontSize: '1.1rem' }}>QA</Link>
+                            <Link to="/#success-stories" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e293b', fontWeight: 700, fontSize: '1.1rem' }}>Success stories</Link>
                             <hr style={{ border: 'none', borderTop: '1px solid var(--border)' }} />
                             <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="btn" style={{ justifyContent: 'center', background: 'var(--bg-tertiary)' }}>Login</Link>
-                            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="btn btn-primary" style={{ justifyContent: 'center' }}>Get Started</Link>
+                            <Link to="/login?mode=signup" onClick={() => setIsMobileMenuOpen(false)} className="btn btn-primary" style={{ justifyContent: 'center' }}>Get Started</Link>
                         </>
                     ) : (
                         <>
