@@ -9,6 +9,17 @@
   --secondary: #7c3aed;
   --accent: #f59e0b;
 
+  /* Fallback theme values (light mode defaults) — ensures text is always visible
+     even before the data-theme attribute is set by React */
+  --background: #ffffff;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --glass: rgba(255, 255, 255, 0.8);
+  --border: rgba(0, 0, 0, 0.08);
+  --card-bg: #ffffff;
+  --bg-tertiary: #f8fafc;
+  --section-bg: #ffffff;
+
   --gradient-blue: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
   --gradient-premium: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
   --gradient-soft: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);

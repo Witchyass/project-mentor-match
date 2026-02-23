@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, CheckCircle, X, ShieldAlert, Video, Copy } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, X, ShieldAlert, Video, Copy } from 'lucide-react';
 import { createSession, rescheduleSession } from '../lib/sessionService';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../lib/firebase';
+import { ref, get } from 'firebase/database';
 
 const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode = false, sessionToReschedule = null }) => {
     const { user, profile } = useAuth();
@@ -15,13 +17,35 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
     const [isCreating, setIsCreating] = useState(false);
     const [copiedLink, setCopiedLink] = useState(false);
     const [existingSession, setExistingSession] = useState(null);
+    const [busySlots, setBusySlots] = useState({});
 
     const isMentor = profile?.role === 'mentor';
     const partnerName = mentorProfile?.name || (isMentor ? 'mentee' : 'mentor');
 
-    // Check for existing session
+    // Helper: check if a given time string on the selected date is already taken
+    const isTimeTaken = (timeStr, dateStr) => {
+        if (!dateStr || !timeStr || !busySlots) return false;
+        const [time, period] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+        if (period === 'PM' && hours !== 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+        const slotDate = new Date(`${dateStr}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`);
+        const slotKey = slotDate.getTime().toString();
+        return !!busySlots[slotKey];
+    };
+
+    // Reset ALL state and fetch busySlots whenever the modal opens or target mentee changes
     React.useEffect(() => {
         if (!isOpen) return;
+
+        // Full reset so a new mentee always starts from step 1
+        setStep(1);
+        setSelectedTime('');
+        setMeetLink('');
+        setCopiedLink(false);
+        setIsCreating(false);
+        setExistingSession(null);
+        setBusySlots({});
 
         if (rescheduleMode && sessionToReschedule) {
             setTopic(sessionToReschedule.topic || '');
@@ -32,6 +56,12 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
         }
 
         if (!user || !mentorId) return;
+
+        // Fetch the mentor's busy slots to disable taken times
+        const targetMentorId = profile?.role === 'mentor' ? user.uid : mentorId;
+        get(ref(db, `users/${targetMentorId}/busySlots`)).then(snap => {
+            setBusySlots(snap.exists() ? snap.val() : {});
+        });
 
         import('../lib/sessionService').then(({ findActiveSession }) => {
             findActiveSession(user.uid, mentorId).then(setExistingSession);
@@ -205,16 +235,49 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                             {step === 2 && (
                                 <div className="animate-fade-in">
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                        {times.map(time => (
-                                            <button
-                                                key={time}
-                                                className={`glass ${selectedTime === time ? 'btn-primary' : ''}`}
-                                                onClick={() => setSelectedTime(time)}
-                                                style={{ padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '1rem' }}
-                                            >
-                                                <Clock size={16} /> {time}
-                                            </button>
-                                        ))}
+                                        {times.map(time => {
+                                            const taken = isTimeTaken(time, selectedDate);
+                                            const isSelected = selectedTime === time;
+                                            return (
+                                                <button
+                                                    key={time}
+                                                    disabled={taken}
+                                                    onClick={() => !taken && setSelectedTime(time)}
+                                                    style={{
+                                                        padding: '1rem',
+                                                        borderRadius: 'var(--radius-md)',
+                                                        border: `1px solid ${isSelected ? 'var(--primary)' : taken ? '#e2e8f0' : 'var(--border)'}`,
+                                                        background: isSelected ? 'var(--primary)' : taken ? '#f8fafc' : 'rgba(255,255,255,0.7)',
+                                                        color: isSelected ? 'white' : taken ? '#cbd5e1' : 'inherit',
+                                                        cursor: taken ? 'not-allowed' : 'pointer',
+                                                        textAlign: 'left',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'space-between',
+                                                        gap: '1rem',
+                                                        opacity: taken ? 0.6 : 1,
+                                                        transition: '0.2s'
+                                                    }}
+                                                >
+                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                        <Clock size={16} />
+                                                        {time}
+                                                    </span>
+                                                    {taken && (
+                                                        <span style={{
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 800,
+                                                            background: '#fee2e2',
+                                                            color: '#ef4444',
+                                                            padding: '2px 8px',
+                                                            borderRadius: '100px'
+                                                        }}>
+                                                            TAKEN
+                                                        </span>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
 
                                     <div className="glass" style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

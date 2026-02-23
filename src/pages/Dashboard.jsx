@@ -18,7 +18,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [sessions, setSessions] = useState([]);
     const [requests, setRequests] = useState([]);
-    const [sessionStats, setSessionStats] = useState({ total: 0, completed: 0, upcoming: 0, totalHours: 0 });
+    const [matches, setMatches] = useState([]);
     const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -38,17 +38,26 @@ const Dashboard = () => {
     useEffect(() => {
         if (!user || !profile) return;
 
-        // Subscribe to sessions
+        // 1. Subscribe to sessions
         const unsubSessions = subscribeToUserSessions(user.uid, (sessionData) => {
-            setSessions(sessionData);
+            setSessions(sessionData || []);
         });
 
-        // Get session stats
-        getSessionStats(user.uid, profile.role).then(stats => {
-            setSessionStats(stats);
+        // 2. Subscribe to matches (to get accurate mentee count)
+        const matchesRef = ref(db, 'matches');
+        const unsubMatches = onValue(matchesRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const myMatches = Object.values(data).filter(m =>
+                    m.mentorId === user.uid || m.menteeId === user.uid
+                );
+                setMatches(myMatches);
+            } else {
+                setMatches([]);
+            }
         });
 
-        // If mentor, subscribe to incoming requests
+        // 3. If mentor, subscribe to incoming requests
         let unsubRequests = () => { };
         if (isMentor) {
             const requestsRef = ref(db, 'requests');
@@ -66,6 +75,7 @@ const Dashboard = () => {
 
         return () => {
             unsubSessions();
+            unsubMatches();
             unsubRequests();
         };
     }, [user, profile, isMentor]);
@@ -95,22 +105,31 @@ const Dashboard = () => {
 
     if (authLoading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>;
 
+    // Derived statistics from real-time data
+    const now = new Date();
+    const completedSessions = sessions.filter(s => s.status === 'completed');
+    const upcomingSessions = sessions
+        .filter(s => s.status === 'scheduled' && new Date(s.dateTime) > now)
+        .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+
+    const totalHours = completedSessions.reduce((sum, s) => sum + (s.duration || 60), 0) / 60;
+
     const stats = [
         {
             label: isMentor ? 'Completed Sessions' : 'Sessions Attended',
-            value: sessionStats.completed,
+            value: completedSessions.length,
             icon: <Video size={20} />,
             color: '#2563eb'
         },
         {
             label: isMentor ? 'Active Mentees' : 'Total Matches',
-            value: isMentor ? requests.length + sessions.length : '3',
+            value: matches.length,
             icon: <Users size={20} />,
             color: '#7c3aed'
         },
         {
             label: 'Total Hours',
-            value: `${sessionStats.totalHours.toFixed(0)}H`,
+            value: `${Math.round(totalHours)}H`,
             icon: <Clock size={20} />,
             color: '#f59e0b'
         },
@@ -122,10 +141,7 @@ const Dashboard = () => {
         }
     ];
 
-    const upcomingSessions = sessions
-        .filter(s => s.status === 'upcoming')
-        .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
-        .slice(0, 3);
+    const displaySessions = upcomingSessions.slice(0, 3);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '1.5rem' : '2.5rem' }}>
@@ -145,7 +161,7 @@ const Dashboard = () => {
             >
                 <div style={{ position: 'relative', zIndex: 1 }}>
                     <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
-                        Welcome back, {profile?.name?.split(' ')[0] || 'User'}! 👋
+                        Welcome, {profile?.name?.split(' ')[0] || 'User'}! 👋
                     </h1>
                     <p style={{ fontSize: isMobile ? '1rem' : '1.1rem', opacity: 0.9, fontWeight: 500, maxWidth: '600px' }}>
                         {isMentor
@@ -260,16 +276,16 @@ const Dashboard = () => {
                             <button onClick={() => navigate('/sessions')} style={{ background: 'none', border: 'none', color: '#3b82f6', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>See Schedule</button>
                         </div>
 
-                        {upcomingSessions.length === 0 ? (
+                        {displaySessions.length === 0 ? (
                             <div style={{ background: 'white', padding: '3rem', borderRadius: '24px', border: '1px dashed #cbd5e1', textAlign: 'center' }}>
                                 <p style={{ color: '#64748b', fontWeight: 600 }}>No upcoming sessions scheduled.</p>
-                                <button onClick={() => navigate(isMentor ? '/sessions' : '/discover')} style={{ marginTop: '1rem', background: '#1e3a8a', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
+                                <button onClick={() => navigate(isMentor ? '/availability' : '/discover')} style={{ marginTop: '1rem', background: '#1e3a8a', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
                                     {isMentor ? 'Set Availability' : 'Find a Mentor'}
                                 </button>
                             </div>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {upcomingSessions.map(session => (
+                                {displaySessions.map(session => (
                                     <div key={session.id} style={{
                                         background: 'white',
                                         padding: '1.25rem',
@@ -304,7 +320,7 @@ const Dashboard = () => {
                 isOpen={isDeclineModalOpen}
                 onClose={() => setIsDeclineModalOpen(false)}
                 onConfirm={handleDeclineRequest}
-                requestName={selectedRequest?.fromName}
+                menteeName={selectedRequest?.fromName}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Heart, Calendar, Target, MessageSquare } from 'lucide-react';
 
@@ -7,7 +7,7 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
     const [customMessage, setCustomMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const reasons = [
+    const reasons = useMemo(() => [
         {
             id: 'capacity',
             label: 'At capacity',
@@ -32,7 +32,7 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
             icon: <MessageSquare size={18} />,
             template: ''
         }
-    ];
+    ], [menteeName]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

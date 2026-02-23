@@ -78,13 +78,13 @@ const EmailVerification = () => {
                     {verified ? (
                         <motion.div key="v" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                             <Check size={64} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Verified! 🎉</h2>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1e293b' }}>Verified! 🎉</h2>
                             <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Welcome! Redirecting you now...</p>
                         </motion.div>
                     ) : (
                         <div style={{ width: '100%' }}>
                             <Mail size={56} color="#1e3a8a" style={{ margin: '0 auto 1.5rem' }} />
-                            <h1 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: 900, marginBottom: '0.75rem' }}>Check your inbox</h1>
+                            <h1 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: 900, marginBottom: '0.75rem', color: '#1e293b' }}>Check your inbox</h1>
                             <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '1.5rem' }}>We sent a link to <b style={{ color: '#1e3a8a' }}>{user?.email}</b></p>
 
                             <button onClick={handleCheckNow} disabled={checking} style={{ width: '100%', padding: '0.9rem', background: '#1e3a8a', color: 'white', borderRadius: '12px', border: 'none', fontWeight: 700, cursor: 'pointer', marginBottom: '1rem' }}>

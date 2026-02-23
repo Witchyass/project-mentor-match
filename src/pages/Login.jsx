@@ -113,7 +113,7 @@ const Login = () => {
 
                     {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '1rem' }}>{error}</p>}
 
-                    <p style={{ marginTop: '2rem', fontSize: '0.9rem', textAlign: 'center' }}>
+                    <p style={{ marginTop: '2rem', fontSize: '0.9rem', textAlign: 'center', color: '#1e293b' }}>
                         {isLogin ? "Don't have an account? " : "Already have an account? "}
                         <button onClick={() => setIsLogin(!isLogin)} style={{ background: 'transparent', border: 'none', color: '#2563eb', fontWeight: 700, cursor: 'pointer' }}>{isLogin ? 'Sign Up' : 'Login'}</button>
                     </p>

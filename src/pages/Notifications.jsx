@@ -281,8 +281,8 @@ const Notifications = () => {
                     ) : (
                         <div style={{ textAlign: 'center', padding: '6rem 0', opacity: 0.5 }}>
                             <Bell size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.2 }} />
-                            <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>All caught up!</h3>
-                            <p style={{ fontSize: '0.9rem' }}>You have no {activeTab} notifications.</p>
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1e293b' }}>All caught up!</h3>
+                            <p style={{ fontSize: '0.9rem', color: '#64748b' }}>You have no {activeTab} notifications.</p>
                         </div>
                     )}
                 </AnimatePresence>

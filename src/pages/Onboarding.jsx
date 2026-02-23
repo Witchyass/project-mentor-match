@@ -118,10 +118,10 @@ const Onboarding = () => {
                                 <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#1e293b', marginBottom: '1.5rem' }}>Expertise & Experience</h2>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                     <div>
-                                        <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem' }}>Industries / Interests</label>
+                                        <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: '#1e293b' }}>Industries / Interests</label>
                                         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '0.6rem' }}>
                                             {(formData.role === 'mentor' ? expertiseOptions : ["Product Management", "Software Development", "Design", "Data Science", "Marketing", "Finance"]).map(o => (
-                                                <label key={o} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                                                <label key={o} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', cursor: 'pointer', color: '#1e293b' }}>
                                                     <input type="checkbox" checked={(formData.role === 'mentor' ? formData.expertiseAreas : formData.interests).includes(o)} onChange={() => toggleItem(formData.role === 'mentor' ? 'expertiseAreas' : 'interests', o)} style={{ width: '16px', height: '16px' }} />
                                                     {o}
                                                 </label>
@@ -130,10 +130,10 @@ const Onboarding = () => {
                                     </div>
                                     {formData.role === 'mentor' && (
                                         <div>
-                                            <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem' }}>Experience Level</label>
+                                            <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: '#1e293b' }}>Experience Level</label>
                                             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '0.6rem' }}>
                                                 {["1-2 Years", "3-5 Years", "5-10 Years", "10+ Years"].map(o => (
-                                                    <label key={o} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+                                                    <label key={o} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#1e293b' }}>
                                                         <input type="radio" name="exp" checked={formData.yearsExperience === o} onChange={() => setFormData({ ...formData, yearsExperience: o })} />
                                                         {o}
                                                     </label>
@@ -147,17 +147,17 @@ const Onboarding = () => {
 
                         {step === 4 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                <h2 style={{ fontSize: '1.3rem', fontWeight: 800 }}>Preferences</h2>
+                                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#1e293b' }}>Preferences</h2>
                                 <div>
-                                    <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem' }}>Tell us about your goals</label>
+                                    <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: '#1e293b' }}>Tell us about your goals</label>
                                     <textarea value={formData.bio} onChange={e => setFormData({ ...formData, bio: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '10px', border: '1px solid #e2e8f0', minHeight: '100px', outline: 'none' }} />
                                 </div>
                                 {formData.role === 'mentor' && (
                                     <div>
-                                        <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem' }}>Mentorship Style</label>
+                                        <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: '#1e293b' }}>Mentorship Style</label>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                             {mentorshipStyles.map(s => (
-                                                <label key={s} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+                                                <label key={s} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#1e293b' }}>
                                                     <input type="radio" name="style" checked={formData.mentorshipStyle === s} onChange={() => setFormData({ ...formData, mentorshipStyle: s })} />
                                                     {s}
                                                 </label>
@@ -171,14 +171,14 @@ const Onboarding = () => {
                         {step === 5 && (
                             <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                                 <CheckCircle2 size={60} color="#10b981" style={{ margin: '0 auto 1rem' }} />
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Ready to go!</h2>
+                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1e293b' }}>Ready to go!</h2>
                                 <p style={{ fontSize: '0.9rem', color: '#64748b' }}>Your customized profile will help us find the best matches.</p>
                             </div>
                         )}
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-                        <button onClick={handleBack} disabled={step === 1} style={{ flex: 1, padding: '0.8rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', fontWeight: 700, cursor: 'pointer' }}>Back</button>
+                        <button onClick={handleBack} disabled={step === 1} style={{ flex: 1, padding: '0.8rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', color: '#1e293b', fontWeight: 700, cursor: 'pointer' }}>Back</button>
                         <button onClick={step === 5 ? handleSubmit : handleNext} disabled={step === 1 && !formData.role || loading} style={{ flex: 2, padding: '0.8rem', borderRadius: '12px', background: '#1e3a8a', color: 'white', border: 'none', fontWeight: 700, cursor: 'pointer' }}>{loading ? 'Saving...' : (step === 5 ? 'Done' : 'Continue')}</button>
                     </div>
                 </motion.div>

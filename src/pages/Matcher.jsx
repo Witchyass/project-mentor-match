@@ -228,11 +228,11 @@ const Matcher = () => {
                     <div style={{ width: '64px', height: '64px', background: '#dcfce7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                         <CheckCircle size={32} color="#16a34a" />
                     </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>You're Matched!</h2>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.5rem', color: '#1e293b' }}>You're Matched!</h2>
                     <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '2rem' }}>You've found your mentor. Start your journey by reaching out or scheduling a session.</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#f8fafc', padding: '1rem', borderRadius: '16px', marginBottom: '2rem', textAlign: 'left' }}>
                         <img src={activeMatch.mentorImage} style={{ width: '48px', height: '48px', borderRadius: '12px' }} alt="mentor" />
-                        <div><p style={{ fontWeight: 800, fontSize: '0.95rem' }}>{activeMatch.mentorName}</p><p style={{ fontSize: '0.8rem', color: '#64748b' }}>{activeMatch.mentorCareer}</p></div>
+                        <div><p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b' }}>{activeMatch.mentorName}</p><p style={{ fontSize: '0.8rem', color: '#64748b' }}>{activeMatch.mentorCareer}</p></div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         <button onClick={() => navigate('/messages')} style={{ padding: '0.8rem', borderRadius: '12px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><MessageCircle size={18} /> Message</button>
@@ -259,7 +259,7 @@ const Matcher = () => {
                     ) : (
                         <div style={{ textAlign: 'center', padding: '2rem' }}>
                             <Sparkles size={48} color="#3b82f6" style={{ marginBottom: '1rem' }} />
-                            <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>All Caught Up!</h2>
+                            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b' }}>All Caught Up!</h2>
                             <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.5rem' }}>New experts join every day. Check back soon!</p>
                             <button onClick={() => window.location.reload()} style={{ marginTop: '1.5rem', padding: '0.6rem 1.5rem', borderRadius: '10px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800 }}>Refresh</button>
                         </div>

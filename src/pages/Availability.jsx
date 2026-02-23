@@ -136,7 +136,7 @@ const Availability = () => {
                             {isEditing ? (
                                 <input type="number" value={availabilityData.sessionDuration} onChange={(e) => setAvailabilityData({ ...availabilityData, sessionDuration: e.target.value })} style={{ width: '100%', padding: '0.7rem', borderRadius: '8px', border: '1px solid #cbd5e1' }} />
                             ) : (
-                                <p style={{ fontSize: '1.1rem', fontWeight: 800 }}>{availabilityData.sessionDuration} Mins</p>
+                                <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>{availabilityData.sessionDuration} Mins</p>
                             )}
                         </div>
                         <div>
@@ -144,7 +144,7 @@ const Availability = () => {
                             {isEditing ? (
                                 <input type="number" value={availabilityData.maxSessionsPerWeek} onChange={(e) => setAvailabilityData({ ...availabilityData, maxSessionsPerWeek: parseInt(e.target.value) || 0 })} style={{ width: '100%', padding: '0.7rem', borderRadius: '8px', border: '1px solid #cbd5e1' }} />
                             ) : (
-                                <p style={{ fontSize: '1.1rem', fontWeight: 800 }}>{availabilityData.maxSessionsPerWeek} Sessions</p>
+                                <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>{availabilityData.maxSessionsPerWeek} Sessions</p>
                             )}
                         </div>
                     </div>
@@ -161,7 +161,7 @@ const Availability = () => {
                             {busySlots.map((slot, i) => (
                                 <div key={i} style={{ background: 'white', padding: '1rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#3b82f6' }}>{new Date(slot.startTime).toLocaleDateString()}</div>
-                                    <div style={{ fontSize: '0.95rem', fontWeight: 700 }}>{new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>{new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                     <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.4rem' }}>{slot.menteeName ? `With ${slot.menteeName}` : 'Booked'}</div>
                                 </div>
                             ))}
