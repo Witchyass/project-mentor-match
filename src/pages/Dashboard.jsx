@@ -307,7 +307,7 @@ const Dashboard = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <button onClick={() => navigate(`/sessions/${session.id}`)} style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#f1f5f9', color: '#1e3a8a', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '0.8rem' }}>View</button>
+
                                     </div>
                                 ))}
                             </div>
