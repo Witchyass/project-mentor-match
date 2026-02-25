@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthP
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft, Mail, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getFriendlyErrorMessage } from '../utils/errorMessages';
 import Logo from '../components/Logo';
 
 const Login = () => {
@@ -33,13 +34,36 @@ const Login = () => {
             setLoading(true);
             await signInWithPopup(auth, new GoogleAuthProvider());
             navigate('/dashboard');
-        } catch (err) { setError(err.message); }
+        } catch (err) { setError(getFriendlyErrorMessage(err.code)); }
         finally { setLoading(false); }
+    };
+
+    const validatePassword = (pass) => {
+        const errors = [];
+        if (pass.length < 16) errors.push("at least 16 characters");
+        if (!/[A-Z]/.test(pass)) errors.push("one uppercase letter");
+        if (!/[a-z]/.test(pass)) errors.push("one lowercase letter");
+        if (!/[0-9]/.test(pass)) errors.push("one number");
+        if (!/[!@#$%^&*]/.test(pass)) errors.push("one special character (!@#$%^&*)");
+
+        if (errors.length > 0) {
+            return "Password must contain: " + errors.join(", ") + ".";
+        }
+        return null;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        if (!isLogin) {
+            const passError = validatePassword(password);
+            if (passError) {
+                setError(passError);
+                return;
+            }
+        }
+
         setLoading(true);
         try {
             if (isLogin) {
@@ -50,7 +74,10 @@ const Login = () => {
                 await sendEmailVerification(cred.user);
                 navigate('/verify');
             }
-        } catch (err) { setError(err.message); }
+        } catch (err) {
+            console.error("Auth Error:", err.code, err.message);
+            setError(getFriendlyErrorMessage(err.code));
+        }
         finally { setLoading(false); }
     };
 

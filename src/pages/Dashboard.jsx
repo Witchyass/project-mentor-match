@@ -135,7 +135,7 @@ const Dashboard = () => {
         },
         {
             label: 'Success Rate',
-            value: isMentor ? '94%' : '65%',
+            value: isMentor ? '94%' : '94%',
             icon: <Target size={20} />,
             color: '#10b981'
         }

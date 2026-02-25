@@ -30,7 +30,7 @@ const Landing = () => {
         { icon: <Users size={24} />, count: "500+", label: "Expert Mentors", color: "#6366f1" },
         { icon: <Star size={24} />, count: "4.8", label: "Average Rating", color: "#f59e0b" },
         { icon: <MessageSquare size={24} />, count: "10,000+", label: "Sessions Completed", color: "#10b981" },
-        { icon: <TrendingUp size={24} />, count: "92%", label: "Success Rate", color: "#8b5cf6" },
+        { icon: <TrendingUp size={24} />, count: "94%", label: "Success Rate", color: "#8b5cf6" },
     ];
 
     const stories = [

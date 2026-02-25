@@ -4,13 +4,15 @@ MentorMatch uses a sophisticated **Vector Space Model** to calculate compatibili
 
 ## 📊 The Scoring Algorithm
 
-The compatibility score (0-100%) is calculated using a weighted average of four primary feature vectors:
+The compatibility score (0-100%) is calculated using a weighted average across six feature categories:
 
 | Feature | Weight | Description |
 | :--- | :--- | :--- |
-| **Skills & Interests** | 45% | Overlap between mentor expertise and mentee interests. |
-| **Career Alignment** | 35% | Keyword similarity in career titles and goal descriptions. |
-| **Experience Delta** | 15% | Ensures mentors have more experience than mentees (and vice-versa). |
+| **Skills & Interests** | 40% | Overlap between mentor expertise and mentee interests (with semantic expansion). |
+| **Career Alignment** | 20% | Keyword similarity in career titles and goal descriptions. |
+| **Experience Delta** | 15% | Uses tiered scoring (0, 0.5, 1) based on the career level gap. |
+| **Language Match** | 10% | Binary score (1 or 0) based on shared spoken/written languages. |
+| **Bio Keywords** | 10% | Keyword overlap between user bios (semantic professional alignment). |
 | **Availability** | 5% | Overlapping free days in weekly schedules. |
 
 ---

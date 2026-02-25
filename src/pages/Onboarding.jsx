@@ -26,13 +26,42 @@ const Onboarding = () => {
         role: '', name: '', country: '', email: user?.email || '', career: '', company: '',
         interests: [], expertiseAreas: [], companySizePref: '', yearsExperience: '',
         preferredCountries: [], availability: [], languages: [], mentorshipStyle: '',
-        sessionFrequency: '', sessionDuration: '', preferredDays: [], timeOfDay: '', bio: '', onboarded: true
+        sessionFrequency: '', sessionDuration: '', preferredDays: [], timeOfDay: '', bio: '', onboarded: true,
+        customOther: ''
     });
 
     const [loading, setLoading] = useState(false);
     if (!user) return null;
 
-    const handleNext = () => setStep(step + 1);
+    const validateStep = () => {
+        if (step === 1 && !formData.role) return "Please select a role.";
+        if (step === 2) {
+            if (!formData.name.trim()) return "Full Name is required.";
+            if (!formData.country.trim()) return "Country is required.";
+            if (!formData.career.trim()) return "Career Title is required.";
+            if (!formData.company.trim()) return "Company is required.";
+        }
+        if (step === 3) {
+            const list = formData.role === 'mentor' ? formData.expertiseAreas : formData.interests;
+            if (list.length === 0) return `Please select at least one ${formData.role === 'mentor' ? 'expertise area' : 'interest'}.`;
+            if (list.includes('Other') && !formData.customOther.trim()) return "Please specify your 'Other' field.";
+            if (formData.role === 'mentor' && !formData.yearsExperience) return "Please select your experience level.";
+        }
+        if (step === 4) {
+            if (!formData.bio.trim()) return "Please tell us about your goals.";
+            if (formData.role === 'mentor' && !formData.mentorshipStyle) return "Please select a mentorship style.";
+        }
+        return null;
+    };
+
+    const handleNext = () => {
+        const errorMsg = validateStep();
+        if (errorMsg) {
+            alert(errorMsg);
+            return;
+        }
+        setStep(step + 1);
+    };
     const handleBack = () => setStep(step - 1);
 
     const toggleItem = (field, item) => {
@@ -46,19 +75,31 @@ const Onboarding = () => {
         setLoading(true);
         try {
             const expLevelMap = { "1-2 Years": "Entry", "3-5 Years": "Mid-level", "5-10 Years": "Senior", "10+ Years": "Expert / Lead" };
+
+            let finalSkills = formData.role === 'mentor' ? formData.expertiseAreas : formData.interests;
+            if (finalSkills.includes('Other')) {
+                finalSkills = finalSkills.filter(s => s !== 'Other');
+                if (formData.customOther.trim()) {
+                    finalSkills.push(formData.customOther.trim());
+                }
+            }
+
             const updatedProfile = {
                 ...profile, ...formData,
-                skills: formData.role === 'mentor' ? formData.expertiseAreas : formData.interests,
+                skills: finalSkills,
                 experienceLevel: expLevelMap[formData.yearsExperience] || "Entry",
                 onboarded: true, id: user.uid, email: user.email, updatedAt: new Date().toISOString()
             };
+            delete updatedProfile.customOther;
+
             await firebaseSet(ref(db, `users/${user.uid}`), updatedProfile);
             setTimeout(() => navigate(formData.role === 'mentee' ? '/mentee-preferences' : '/dashboard'), 800);
         } catch (error) { alert(`Error: ${error.message}`); }
         finally { setLoading(false); }
     };
 
-    const expertiseOptions = ["Products", "Healthcare/Tech", "AgTech", "Media & Entertainment", "Fintech", "EdTech", "DevTools", "AI/ML", "SaaS", "Web3/Crypto", "Mobile Apps"];
+    const expertiseOptions = ["Products", "Healthcare/Tech", "AgTech", "Media & Entertainment", "Fintech", "EdTech", "DevTools", "AI/ML", "SaaS", "Web3/Crypto", "Mobile Apps", "Other"];
+    const interestOptions = ["Product Management", "Software Development", "Design", "Data Science", "Marketing", "Finance", "Other"];
     const countryOptions = ["Nigeria", "South Africa", "Kenya", "Rwanda", "Tunisia", "Egypt", "Ghana", "Morocco", "Uganda", "Ethiopia", "Other"];
     const mentorshipStyles = ["Direct and hands-on", "Guidance and support", "Goal-oriented", "Collaborative"];
     const sessionDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -120,13 +161,24 @@ const Onboarding = () => {
                                     <div>
                                         <label style={{ fontWeight: 800, fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: '#1e293b' }}>Industries / Interests</label>
                                         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '0.6rem' }}>
-                                            {(formData.role === 'mentor' ? expertiseOptions : ["Product Management", "Software Development", "Design", "Data Science", "Marketing", "Finance"]).map(o => (
+                                            {(formData.role === 'mentor' ? expertiseOptions : interestOptions).map(o => (
                                                 <label key={o} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', cursor: 'pointer', color: '#1e293b' }}>
                                                     <input type="checkbox" checked={(formData.role === 'mentor' ? formData.expertiseAreas : formData.interests).includes(o)} onChange={() => toggleItem(formData.role === 'mentor' ? 'expertiseAreas' : 'interests', o)} style={{ width: '16px', height: '16px' }} />
                                                     {o}
                                                 </label>
                                             ))}
                                         </div>
+                                        {(formData.role === 'mentor' ? formData.expertiseAreas : formData.interests).includes('Other') && (
+                                            <div style={{ marginTop: '0.75rem' }}>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Specify your field..."
+                                                    value={formData.customOther}
+                                                    onChange={e => setFormData({ ...formData, customOther: e.target.value })}
+                                                    style={{ width: '100%', padding: '0.7rem', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', outline: 'none', fontSize: '0.85rem' }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                     {formData.role === 'mentor' && (
                                         <div>

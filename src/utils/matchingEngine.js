@@ -4,17 +4,23 @@
  */
 
 const WEIGHTS = {
-    SKILLS: 0.45,
-    CAREER: 0.35,
+    SKILLS: 0.40,
+    CAREER: 0.20,
+    LANGUAGE: 0.10,
     EXPERIENCE: 0.15,
+    BIO: 0.10,
     AVAILABILITY: 0.05
 };
 
 const EXPERIENCE_MAP = {
+    "Beginner": 1,
     "Entry": 1,
-    "Mid-level": 2,
-    "Senior": 3,
-    "Expert / Lead": 4
+    "Junior": 2,
+    "Mid": 3,
+    "Mid-level": 3,
+    "Senior": 4,
+    "Expert": 5,
+    "Expert / Lead": 5
 };
 
 // Semantic mapping for common skills to handle partial/related matches
@@ -56,6 +62,28 @@ const calculateSimilarity = (setA, setB) => {
 };
 
 /**
+ * Calculates language overlap score.
+ */
+const calculateLanguageScore = (userLangs = [], targetLangs = []) => {
+    const userSet = new Set(userLangs.map(l => l.toLowerCase().trim()));
+    const targetSet = new Set(targetLangs.map(l => l.toLowerCase().trim()));
+    const intersection = [...userSet].filter(l => targetSet.has(l));
+    return intersection.length > 0 ? 1 : 0;
+};
+
+/**
+ * Calculates bio keyword overlap (lightweight TF-IDF substitute).
+ */
+const calculateBioScore = (userBio = "", targetBio = "") => {
+    if (!userBio || !targetBio) return 0;
+    const userWords = new Set(userBio.toLowerCase().split(/\W+/).filter(w => w.length > 3));
+    const targetWords = new Set(targetBio.toLowerCase().split(/\W+/).filter(w => w.length > 3));
+    if (userWords.size === 0) return 0;
+    const intersection = [...userWords].filter(w => targetWords.has(w));
+    return intersection.length / userWords.size;
+};
+
+/**
  * Calculates a compatibility score from 0-100 between two profiles.
  */
 export const calculateCompatibility = (user, target) => {
@@ -63,54 +91,43 @@ export const calculateCompatibility = (user, target) => {
 
     let finalScore = 0;
 
-    // 1. Semantic Skill Match (45%)
+    // 1. Semantic Skill Match (40%) - Updated Weight
     const userSkills = getSemanticSkills(user.skills || user.interests || []);
     const targetSkills = getSemanticSkills(target.skills || target.expertiseAreas || []);
     const skillSim = calculateSimilarity(userSkills, targetSkills);
     finalScore += skillSim * 100 * WEIGHTS.SKILLS;
 
-    // 2. Career Alignment (35%)
+    // 2. Career Alignment (20%) - Updated Weight
     const userCareer = user.career?.toLowerCase() || "";
     const targetCareer = target.career?.toLowerCase() || "";
     const userCareerWords = new Set(userCareer.split(/[,\s]+/).filter(w => w.length > 2));
     const targetCareerWords = new Set(targetCareer.split(/[,\s]+/).filter(w => w.length > 2));
     const careerSim = calculateSimilarity(userCareerWords, targetCareerWords);
-
-    // Explicit role target check
-    if (user.role === 'mentee' && targetCareer.includes(userCareer) && userCareer.length > 3) {
-        finalScore += 20 * WEIGHTS.CAREER;
-    }
     finalScore += careerSim * 100 * WEIGHTS.CAREER;
 
-    // 3. Experience Delta & Preferences (15%)
+    // 3. Language Match (10%) - New Category
+    const langScore = calculateLanguageScore(user.languages, target.languages);
+    finalScore += langScore * 100 * WEIGHTS.LANGUAGE;
+
+    // 4. Experience Delta (15%)
     const userExp = EXPERIENCE_MAP[user.experienceLevel] || 1;
     const targetExp = EXPERIENCE_MAP[target.experienceLevel] || 1;
+    const expDiff = targetExp - userExp;
 
-    if (user.role === 'mentee') {
-        if (targetExp > userExp) finalScore += 100 * WEIGHTS.EXPERIENCE;
-        else if (targetExp === userExp) finalScore += 50 * WEIGHTS.EXPERIENCE;
-    } else {
-        if (targetExp < userExp) finalScore += 100 * WEIGHTS.EXPERIENCE;
-        else if (targetExp === userExp) finalScore += 50 * WEIGHTS.EXPERIENCE;
-    }
+    let expScore = 0;
+    if (expDiff > 1) expScore = 1;
+    else if (expDiff === 1) expScore = 0.5;
+    else expScore = 0;
 
-    // BONUS: Mentorship Style Match
-    const userStyle = (user.mentoringStyle || user.mentorshipStyle || "").toLowerCase();
-    const targetStyle = (target.mentoringStyle || target.mentorshipStyle || "").toLowerCase();
-    if (userStyle && targetStyle && userStyle === targetStyle) {
-        finalScore += 15; // Style match is a strong bonus
-    }
+    finalScore += expScore * 100 * WEIGHTS.EXPERIENCE;
 
-    // BONUS: Country Preference
-    const preferredCountries = user.preferredCountries || [];
-    if (preferredCountries.length > 0 && target.country && preferredCountries.includes(target.country)) {
-        finalScore += 10;
-    }
+    // 5. Bio Keyword Match (10%) - New Category
+    const bioScore = calculateBioScore(user.bio, target.bio);
+    finalScore += bioScore * 100 * WEIGHTS.BIO;
 
-    // 4. Availability Match (5%) - Fixed overlap check
+    // 6. Availability Match (5%)
     const userSchedule = user.availability?.schedule || [];
     const targetSchedule = target.availability?.schedule || [];
-
     const userDays = new Set(userSchedule.filter(d => d.available).map(d => d.day));
     const targetDays = new Set(targetSchedule.filter(d => d.available).map(d => d.day));
 
@@ -119,6 +136,19 @@ export const calculateCompatibility = (user, target) => {
         if (matchingDays.length > 0) {
             finalScore += 100 * WEIGHTS.AVAILABILITY;
         }
+    }
+
+    // BONUS: Mentorship Style Match
+    const userStyle = (user.mentoringStyle || user.mentorshipStyle || "").toLowerCase();
+    const targetStyle = (target.mentoringStyle || target.mentorshipStyle || "").toLowerCase();
+    if (userStyle && targetStyle && userStyle === targetStyle) {
+        finalScore += 15;
+    }
+
+    // BONUS: Country Preference
+    const preferredCountries = user.preferredCountries || [];
+    if (preferredCountries.length > 0 && target.country && preferredCountries.includes(target.country)) {
+        finalScore += 10;
     }
 
     return Math.min(Math.round(finalScore), 100);

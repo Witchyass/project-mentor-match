@@ -35,8 +35,13 @@ const Navbar = () => {
     }, [user]);
 
     const handleLogout = async () => {
-        await signOut(auth);
-        navigate('/login');
+        try {
+            await signOut(auth);
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('Failed to sign out. Please try again.');
+        }
     };
 
     const isLanding = location.pathname === '/';
