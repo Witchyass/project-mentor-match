@@ -132,7 +132,7 @@ const MenteePreferences = () => {
                     <h1 style={{ fontSize: isMobile ? '1.4rem' : '1.9rem', fontWeight: 900, color: '#1e293b', marginTop: '1rem' }}>
                         Matching Preferences
                     </h1>
-                    <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '0.4rem' }}>
+                    <p style={{ color: '#475569', fontSize: '0.85rem', marginTop: '0.4rem' }}>
                         Help us find mentors that fit your specific needs.
                     </p>
                 </div>

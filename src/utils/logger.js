@@ -33,15 +33,15 @@ const logger = {
         );
         console.log(
             "%cSystem Status: %cOnline%c | Environment: %c%s",
-            "color: #64748b; font-weight: bold;",
+            "color: #475569; font-weight: bold;",
             "color: #10b981; font-weight: bold;",
-            "color: #64748b;",
+            "color: #475569;",
             `color: ${isDev ? '#f59e0b' : '#3b82f6'}; font-weight: bold;`,
             isDev ? "Development" : "Production"
         );
         console.log(
             "%cLooking for a career change? %cCheck out our open roles: %chttps://mentormatch.africa/careers",
-            "color: #64748b;",
+            "color: #475569;",
             "color: #1e3a8a; font-weight: bold;",
             "color: #2563eb; text-decoration: underline;"
         );

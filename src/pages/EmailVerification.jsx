@@ -70,7 +70,7 @@ const EmailVerification = () => {
         <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: isMobile ? '1.5rem' : '3rem' }}>
             <header style={{ width: '100%', maxWidth: '800px', marginBottom: isMobile ? '2rem' : '4rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Logo size={24} />
-                <button onClick={handleBack} style={{ background: 'transparent', border: 'none', color: '#64748b', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>Back to login</button>
+                <button onClick={handleBack} style={{ background: 'transparent', border: 'none', color: '#475569', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>Back to login</button>
             </header>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: '100%', maxWidth: '500px', background: 'white', borderRadius: '32px', border: '1px solid #e2e8f0', padding: isMobile ? '2rem' : '3.5rem', textAlign: 'center' }}>
@@ -79,13 +79,13 @@ const EmailVerification = () => {
                         <motion.div key="v" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                             <Check size={64} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
                             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1e293b' }}>Verified! 🎉</h2>
-                            <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Welcome! Redirecting you now...</p>
+                            <p style={{ color: '#475569', marginTop: '0.5rem' }}>Welcome! Redirecting you now...</p>
                         </motion.div>
                     ) : (
                         <div style={{ width: '100%' }}>
                             <Mail size={56} color="#1e3a8a" style={{ margin: '0 auto 1.5rem' }} />
                             <h1 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: 900, marginBottom: '0.75rem', color: '#1e293b' }}>Check your inbox</h1>
-                            <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '1.5rem' }}>We sent a link to <b style={{ color: '#1e3a8a' }}>{user?.email}</b></p>
+                            <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '1.5rem' }}>We sent a link to <b style={{ color: '#1e3a8a' }}>{user?.email}</b></p>
 
                             <button onClick={handleCheckNow} disabled={checking} style={{ width: '100%', padding: '0.9rem', background: '#1e3a8a', color: 'white', borderRadius: '12px', border: 'none', fontWeight: 700, cursor: 'pointer', marginBottom: '1rem' }}>
                                 {checking ? 'Checking...' : "I've Verified My Email"}

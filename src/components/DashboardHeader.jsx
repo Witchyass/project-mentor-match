@@ -73,7 +73,7 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
                         background: '#f8fafc',
                         border: 'none',
                         cursor: 'pointer',
-                        color: '#64748b',
+                        color: '#475569',
                         padding: '8px',
                         borderRadius: '50%',
                         display: 'flex',
@@ -112,7 +112,7 @@ const DashboardHeader = ({ onToggleSidebar, isSidebarCollapsed }) => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ textAlign: 'right', display: window.innerWidth <= 768 ? 'none' : 'block' }}>
                         <p style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>{profile?.name || 'User'}</p>
-                        <p style={{ fontSize: '0.7rem', color: '#64748b', margin: 0, textTransform: 'capitalize' }}>{profile?.role || 'Member'}</p>
+                        <p style={{ fontSize: '0.7rem', color: '#475569', margin: 0, textTransform: 'capitalize' }}>{profile?.role || 'Member'}</p>
                     </div>
                     <div style={{
                         width: '40px',

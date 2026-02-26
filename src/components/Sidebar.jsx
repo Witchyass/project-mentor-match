@@ -103,7 +103,7 @@ const Sidebar = ({ collapsed, isMobileOpen, onCloseMobile }) => {
                                 padding: '0.85rem 1rem',
                                 borderRadius: '12px',
                                 textDecoration: 'none',
-                                color: isActive ? '#1e3a8a' : '#64748b',
+                                color: isActive ? '#1e3a8a' : '#475569',
                                 background: isActive ? '#eff6ff' : 'transparent',
                                 fontWeight: isActive ? 800 : 600,
                                 fontSize: '0.95rem',

@@ -82,9 +82,9 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
                         <div style={{ padding: '2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                                 <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1e293b' }}>Respond with Care</h2>
-                                <p style={{ fontSize: '0.9rem', color: '#64748b', marginTop: '0.25rem' }}>Help {menteeName} stay encouraged on their journey.</p>
+                                <p style={{ fontSize: '0.9rem', color: '#475569', marginTop: '0.25rem' }}>Help {menteeName} stay encouraged on their journey.</p>
                             </div>
-                            <button onClick={onClose} style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer', color: '#64748b' }}>
+                            <button onClick={onClose} style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer', color: '#475569' }}>
                                 <X size={20} />
                             </button>
                         </div>
@@ -118,7 +118,7 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
                                             textAlign: 'left'
                                         }}
                                     >
-                                        <div style={{ color: reason === r.id ? '#3b82f6' : '#94a3b8' }}>{r.icon}</div>
+                                        <div style={{ color: reason === r.id ? '#3b82f6' : '#475569' }}>{r.icon}</div>
                                         {r.label}
                                     </button>
                                 ))}
@@ -144,13 +144,13 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
                                         background: '#f8fafc'
                                     }}
                                 />
-                                <div style={{ position: 'absolute', bottom: '2.75rem', right: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>
+                                <div style={{ position: 'absolute', bottom: '2.75rem', right: '1rem', fontSize: '0.75rem', color: '#475569', fontWeight: 600 }}>
                                     Your message will be sent privately.
                                 </div>
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem' }}>
-                                <button type="button" onClick={onClose} className="btn" style={{ flex: 1, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b' }}>Cancel</button>
+                                <button type="button" onClick={onClose} className="btn" style={{ flex: 1, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#475569' }}>Cancel</button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting || !customMessage.trim()}
@@ -161,7 +161,7 @@ const DeclineRequestModal = ({ isOpen, onClose, onConfirm, menteeName }) => {
                                 </button>
                             </div>
 
-                            <p style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', marginTop: '1.5rem', fontWeight: 500 }}>
+                            <p style={{ fontSize: '0.8rem', color: '#475569', textAlign: 'center', marginTop: '1.5rem', fontWeight: 500 }}>
                                 <Heart size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
                                 We'll encourage {menteeName} to explore other great mentors.
                             </p>

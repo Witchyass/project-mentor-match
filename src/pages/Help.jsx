@@ -30,7 +30,7 @@ const HelpPage = () => {
                     <HelpCircle size={28} />
                 </div>
                 <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.8rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em' }}>How can we help?</h1>
-                <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '0.95rem' }}>Find answers to common questions about Mentor Match.</p>
+                <p style={{ color: '#475569', marginTop: '0.5rem', fontSize: '0.95rem' }}>Find answers to common questions about Mentor Match.</p>
             </div>
 
             <div style={{ position: 'relative', marginBottom: isMobile ? '1.5rem' : '2.5rem' }}>
@@ -58,7 +58,7 @@ const HelpPage = () => {
                         <AnimatePresence>
                             {activeId === faq.id && (
                                 <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                                    <div style={{ padding: '0 1.25rem 1.25rem', color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{faq.a}</div>
+                                    <div style={{ padding: '0 1.25rem 1.25rem', color: '#475569', fontSize: '0.9rem', lineHeight: 1.6 }}>{faq.a}</div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -66,12 +66,12 @@ const HelpPage = () => {
                 ))}
             </div>
 
-            <div style={{ background: '#1e3a8a', padding: isMobile ? '2rem' : '3rem', borderRadius: '24px', textAlign: 'center', color: 'white' }}>
-                <h2 style={{ fontSize: isMobile ? '1.3rem' : '1.75rem', fontWeight: 800, marginBottom: '0.75rem' }}>Still need help?</h2>
-                <p style={{ opacity: 0.8, fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '500px', margin: '0 auto 2rem' }}>Our support team is ready to assist you on your mentorship journey.</p>
-                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '1rem', justifyContent: 'center' }}>
-                    <button className="btn" style={{ background: 'white', color: '#1e3a8a', padding: '0.8rem 1.5rem', borderRadius: '10px' }}>Contact Support</button>
-                    <Link to="/#success-stories" style={{ color: 'white', fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>Success Stories <ArrowRight size={16} /></Link>
+            <div style={{ background: 'white', padding: isMobile ? '2rem' : '3rem', borderRadius: '24px', textAlign: 'center', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.05)' }}>
+                <h2 style={{ fontSize: isMobile ? '1.3rem' : '1.75rem', fontWeight: 800, marginBottom: '0.75rem', color: '#1e293b' }}>Still need help?</h2>
+                <p style={{ color: '#475569', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '500px', margin: '0 auto 2rem', fontWeight: 500 }}>Our support team is ready to assist you on your mentorship journey.</p>
+                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+                    <button className="btn" style={{ background: '#1e3a8a', color: 'white', padding: '0.8rem 1.5rem', borderRadius: '10px', border: 'none', fontWeight: 700 }}>Contact Support</button>
+                    <Link to="/#success-stories" style={{ color: '#1e3a8a', fontSize: '1rem', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Success Stories <ArrowRight size={18} /></Link>
                 </div>
             </div>
         </div>

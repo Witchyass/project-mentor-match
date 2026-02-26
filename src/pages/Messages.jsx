@@ -154,7 +154,7 @@ const Messages = () => {
                                 <img src={m.avatar} style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#f1f5f9' }} alt="" />
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <h4 style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || 'User'}</h4>
-                                    <p style={{ fontSize: '0.75rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.career || 'Community Member'}</p>
+                                    <p style={{ fontSize: '0.75rem', color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.career || 'Community Member'}</p>
                                 </div>
                             </div>
                         ))}
@@ -169,7 +169,7 @@ const Messages = () => {
                         <>
                             <div style={{ padding: isMobile ? '0.75rem 1rem' : '1rem 1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    {isMobile && <ChevronLeft size={24} onClick={() => setView('list')} style={{ cursor: 'pointer', color: '#64748b' }} />}
+                                    {isMobile && <ChevronLeft size={24} onClick={() => setView('list')} style={{ cursor: 'pointer', color: '#475569' }} />}
                                     <img src={selectedMatch.avatar} style={{ width: '36px', height: '36px', borderRadius: '50%' }} alt="" />
                                     <div>
                                         <h3 style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b' }}>{selectedMatch.name}</h3>
@@ -182,7 +182,7 @@ const Messages = () => {
                                     ) : (
                                         <button onClick={() => setIsBookingOpen(true)} style={{ padding: '0.5rem 0.8rem', borderRadius: '8px', background: '#1e3a8a', color: 'white', border: 'none', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer' }}>Schedule</button>
                                     )}
-                                    <button onClick={() => setIsFeedbackOpen(true)} style={{ padding: '0.5rem', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b', cursor: 'pointer' }}><Star size={16} /></button>
+                                    <button onClick={() => setIsFeedbackOpen(true)} style={{ padding: '0.5rem', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#475569', cursor: 'pointer' }}><Star size={16} /></button>
                                 </div>
                             </div>
 
@@ -216,7 +216,7 @@ const Messages = () => {
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.5, pdding: '2rem', textAlign: 'center' }}>
                             <MessageCircle size={48} style={{ marginBottom: '1rem', color: '#cbd5e1' }} />
                             <h3 style={{ fontWeight: 800, color: '#1e293b' }}>Select a chat to begin</h3>
-                            <p style={{ fontSize: '0.85rem' }}>Connect with your matches and start growing together.</p>
+                            <p style={{ fontSize: '0.85rem', color: '#475569' }}>Connect with your matches and start growing together.</p>
                         </div>
                     )}
                 </div>

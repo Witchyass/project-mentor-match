@@ -87,7 +87,7 @@ const ReminderManager = () => {
 
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontWeight: 800, color: '#1e293b', fontSize: '0.9rem', marginBottom: '0.1rem' }}>Session Starting Soon!</p>
-                        <p style={{ fontSize: '0.75rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <p style={{ fontSize: '0.75rem', color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {activeReminder.topic || 'Mentorship Strategy Session'}
                         </p>
                     </div>
@@ -116,7 +116,7 @@ const ReminderManager = () => {
                             style={{
                                 background: 'none',
                                 border: 'none',
-                                color: '#94a3b8',
+                                color: '#475569',
                                 padding: '0.5rem',
                                 cursor: 'pointer'
                             }}

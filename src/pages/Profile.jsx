@@ -125,7 +125,7 @@ const Profile = () => {
             {isOwnProfile && (!editing ? (
                 <button
                     onClick={() => setIsEditing(prev => ({ ...prev, [section]: true }))}
-                    style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ background: 'transparent', border: 'none', color: '#475569', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                     <Edit2 size={14} /> Edit
                 </button>
@@ -133,7 +133,7 @@ const Profile = () => {
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     <button
                         onClick={() => setIsEditing(prev => ({ ...prev, [section]: false }))}
-                        style={{ background: 'transparent', border: 'none', color: '#64748b', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer' }}
+                        style={{ background: 'transparent', border: 'none', color: '#475569', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer' }}
                     >
                         Cancel
                     </button>
@@ -202,7 +202,7 @@ const Profile = () => {
                         alignItems: 'center',
                         justifyContent: isMobile ? 'center' : 'flex-start',
                         gap: isMobile ? '1rem' : '1.5rem',
-                        color: '#64748b',
+                        color: '#475569',
                         flexWrap: 'wrap'
                     }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, fontSize: '0.9rem' }}>
@@ -226,7 +226,7 @@ const Profile = () => {
                         { label: 'Email', value: currentProfile?.email, readonly: true }
                     ].map((field, i) => (
                         <div key={i}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{field.label}</label>
+                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#475569', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{field.label}</label>
                             {isEditing.basic && !field.readonly ? (
                                 <input
                                     type="text"
@@ -235,7 +235,7 @@ const Profile = () => {
                                     style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 600, outline: 'none', fontSize: '0.95rem' }}
                                 />
                             ) : (
-                                <p style={{ fontWeight: 700, color: field.readonly ? '#94a3b8' : '#1e293b', fontSize: '1rem' }}>{field.value || 'Not provided'}</p>
+                                <p style={{ fontWeight: 700, color: field.readonly ? '#475569' : '#1e293b', fontSize: '1rem' }}>{field.value || 'Not provided'}</p>
                             )}
                         </div>
                     ))}

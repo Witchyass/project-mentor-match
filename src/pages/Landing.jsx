@@ -77,13 +77,14 @@ const Landing = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: isMobile ? '2rem' : '4rem',
-                flexDirection: isMobile ? 'column' : 'row'
+                flexDirection: isMobile ? 'column' : 'row',
+                background: '#ffffff'
             }}>
                 <div style={{ flex: '1', minWidth: isMobile ? '100%' : '350px', textAlign: isMobile ? 'center' : 'left' }}>
                     <h1 style={{ fontSize: 'clamp(2.2rem, 8vw, 4.2rem)', lineHeight: 1.1, fontWeight: 900, color: '#1e3a8a', marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>
                         The Right Mentor <br /> Changes Everything.
                     </h1>
-                    <p style={{ fontSize: '1.1rem', color: '#64748b', marginBottom: '2.5rem', maxWidth: '540px', margin: isMobile ? '0 auto 2.5rem' : '0 0 2.5rem', lineHeight: 1.6, fontWeight: 500 }}>
+                    <p style={{ fontSize: '1.1rem', color: '#475569', marginBottom: '2.5rem', maxWidth: '540px', margin: isMobile ? '0 auto 2.5rem' : '0 0 2.5rem', lineHeight: 1.6, fontWeight: 500 }}>
                         We use intelligent matching to connect you with mentors who understand your journey and help you achieve measurable growth.
                     </p>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-start' }}>
@@ -100,7 +101,7 @@ const Landing = () => {
                                 </div>
                             ))}
                         </div>
-                        <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
+                        <p style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>
                             Trusted by <span style={{ color: '#1e293b', fontWeight: 800 }}>10,000+</span> users
                         </p>
                     </div>
@@ -112,28 +113,43 @@ const Landing = () => {
                     position: 'relative',
                     height: isMobile ? '400px' : '520px',
                     display: 'flex',
-                    gap: '0.75rem',
+                    gap: isMobile ? '1rem' : '1.5rem',
                     justifyContent: 'center',
-                    overflow: 'hidden'
+                    alignItems: 'center'
                 }}>
-                    <div style={{ width: isMobile ? '140px' : '260px', height: isMobile ? '240px' : '380px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', alignSelf: 'center', position: 'relative', zIndex: 1 }}>
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        style={{ width: isMobile ? '140px' : '240px', height: isMobile ? '240px' : '360px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', alignSelf: 'flex-start', marginTop: isMobile ? '0' : '2rem' }}
+                    >
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Mentor" />
-                    </div>
-                    <div style={{ width: isMobile ? '160px' : '280px', height: isMobile ? '280px' : '420px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', position: 'relative', zIndex: 2, margin: isMobile ? '0 -10%' : '0 -20% 0 0' }}>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        style={{ width: isMobile ? '160px' : '260px', height: isMobile ? '280px' : '400px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', zIndex: 2 }}
+                    >
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Mentor" />
-                    </div>
+                    </motion.div>
                     {!isMobile && (
-                        <div style={{ width: '240px', height: '360px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', alignSelf: 'end' }}>
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                            style={{ width: '220px', height: '340px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', border: '1px solid #e2e8f0', alignSelf: 'flex-end', marginBottom: '2rem' }}
+                        >
                             <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Mentor" />
-                        </div>
+                        </motion.div>
                     )}
                 </div>
             </section>
 
             {/* How it Works */}
-            <section id="how-it-works" style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem' }}>
+            <section id="how-it-works" style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#ffffff' }}>
                 <div style={{
-                    maxWidth: '1200px',
+                    maxWidth: 'var(--max-content-width)',
                     margin: '0 auto',
                     background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
                     borderRadius: isMobile ? '24px' : '40px',
@@ -143,7 +159,7 @@ const Landing = () => {
                     overflow: 'hidden'
                 }}>
                     <div style={{ textAlign: 'center', marginBottom: isMobile ? '3rem' : '8rem' }}>
-                        <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.02em' }}>How it Works</h2>
+                        <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.02em', color: '#ffffff' }}>How it Works</h2>
                     </div>
                     <div style={{
                         display: 'grid',
@@ -155,7 +171,7 @@ const Landing = () => {
                     }}>
                         {!isMobile && (
                             <svg style={{ position: 'absolute', top: '150px', left: '10%', width: '80%', height: '100px', zIndex: -1 }}>
-                                <path d="M 0 50 Q 150 -50 300 50 T 600 50" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2" strokeDasharray="8,8" />
+                                <path d="M 0 50 Q 150 -50 300 50 T 600 50 T 900 50" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2" strokeDasharray="8,8" />
                             </svg>
                         )}
                         {[
@@ -166,9 +182,9 @@ const Landing = () => {
                         ].map(({ icon, step, title, desc, mt }) => (
                             <div key={step} style={{ marginTop: mt, textAlign: 'center' }}>
                                 <div style={{ width: '60px', height: '60px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)' }}>{icon}</div>
-                                <p style={{ fontSize: '0.7rem', fontWeight: 800, opacity: 0.8, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{step}</p>
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.75rem' }}>{title}</h3>
-                                <p style={{ fontSize: '0.9rem', opacity: 0.9, lineHeight: 1.5 }}>{desc}</p>
+                                <p style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.8)' }}>{step}</p>
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.75rem', color: '#ffffff' }}>{title}</h3>
+                                <p style={{ fontSize: '0.9rem', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)' }}>{desc}</p>
                             </div>
                         ))}
                     </div>
@@ -176,12 +192,12 @@ const Landing = () => {
             </section>
 
             {/* Success Stories */}
-            <section id="success-stories" style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#f8fafc' }}>
-                <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
+            <section id="success-stories" style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#ffffff' }}>
+                <div style={{ maxWidth: 'var(--max-content-width)', margin: '0 auto' }}>
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <p style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2563eb', marginBottom: '0.75rem' }}>Real Results</p>
                         <h2 style={{ fontSize: isMobile ? '2.2rem' : '2.5rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Success Stories</h2>
-                        <p style={{ color: '#64748b', fontSize: '1rem', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
+                        <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
                             Professionals across Africa are transforming their careers through the power of the right mentorship connection.
                         </p>
                     </div>
@@ -213,7 +229,7 @@ const Landing = () => {
                                     <img src={s.img} alt={s.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #e2e8f0' }} />
                                     <div>
                                         <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b', marginBottom: '0.1rem' }}>{s.name}</p>
-                                        <p style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>{s.role}</p>
+                                        <p style={{ fontSize: '0.78rem', color: '#475569', fontWeight: 600 }}>{s.role}</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -224,11 +240,11 @@ const Landing = () => {
 
             {/* Top Mentors */}
             <section style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#ffffff' }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <div style={{ maxWidth: 'var(--max-content-width)', margin: '0 auto' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1.5rem' }}>
                         <div>
                             <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>Top Rated Mentors</h2>
-                            <p style={{ color: '#64748b', fontWeight: 500 }}>Learn from industry leaders at top tech companies.</p>
+                            <p style={{ color: '#475569', fontWeight: 500 }}>Learn from industry leaders at top tech companies.</p>
                         </div>
                         <Link to="/login?mode=signup" style={{ color: '#1e3a8a', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             View all mentors <ArrowRight size={18} />
@@ -248,10 +264,10 @@ const Landing = () => {
                                 </div>
                                 <div style={{ padding: '1.5rem' }}>
                                     <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.25rem' }}>{m.name}</h4>
-                                    <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 500, marginBottom: '1.25rem' }}>{m.role}</p>
+                                    <p style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500, marginBottom: '1.25rem' }}>{m.role}</p>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#f59e0b', marginBottom: '1.25rem' }}>
                                         {[1, 2, 3, 4, 5].map(s => <Star key={s} size={14} fill="currentColor" />)}
-                                        <span style={{ color: '#64748b', fontSize: '0.8rem', marginLeft: '0.5rem', fontWeight: 600 }}>5.0 ({m.reviews})</span>
+                                        <span style={{ color: '#475569', fontSize: '0.8rem', marginLeft: '0.5rem', fontWeight: 600 }}>5.0 ({m.reviews})</span>
                                     </div>
                                     <Link to="/login?mode=signup" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', padding: '0.8rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#1e3a8a', fontWeight: 800 }}>View Profile</Link>
                                 </div>
@@ -262,15 +278,15 @@ const Landing = () => {
             </section>
 
             {/* Platform Stats */}
-            <section style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#f8fafc' }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <section style={{ padding: isMobile ? '4rem 1.5rem' : '6rem 2rem', background: '#ffffff' }}>
+                <div style={{ maxWidth: 'var(--max-content-width)', margin: '0 auto' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '1rem' : '2rem' }}>
                         {stats.map((s, i) => (
                             <div key={i} style={{ background: 'white', padding: isMobile ? '1.5rem' : '2.5rem', borderRadius: '24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', border: '1px solid rgba(0,0,0,0.03)' }}>
                                 <div style={{ color: s.color, background: `${s.color}10`, padding: '0.75rem', borderRadius: '12px' }}>{s.icon}</div>
                                 <div>
                                     <p style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 900, color: '#1e293b' }}>{s.count}</p>
-                                    <p style={{ color: '#64748b', fontWeight: 700, fontSize: '0.85rem' }}>{s.label}</p>
+                                    <p style={{ color: '#475569', fontWeight: 700, fontSize: '0.85rem' }}>{s.label}</p>
                                 </div>
                             </div>
                         ))}
@@ -296,7 +312,7 @@ const Landing = () => {
                                     <HelpCircle size={20} color="#1e3a8a" />
                                     {item.q}
                                 </h4>
-                                <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: 500, paddingLeft: isMobile ? '0' : '2.5rem' }}>{item.a}</p>
+                                <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: 500, paddingLeft: isMobile ? '0' : '2.5rem' }}>{item.a}</p>
                             </div>
                         ))}
                     </div>
@@ -344,7 +360,7 @@ const Landing = () => {
                         </div>
                     </div>
                 </div>
-                <div style={{ maxWidth: '1200px', margin: '2rem auto 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748b', fontSize: '0.8rem', flexDirection: isMobile ? 'column' : 'row', gap: '1rem', textAlign: 'center' }}>
+                <div style={{ maxWidth: '1200px', margin: '2rem auto 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#94a3b8', fontSize: '0.8rem', flexDirection: isMobile ? 'column' : 'row', gap: '1rem', textAlign: 'center' }}>
                     <p>© 2026 MentorMatch. All rights reserved.</p>
                     <div style={{ display: 'flex', gap: '2rem' }}>
                         <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</a>

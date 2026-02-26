@@ -84,13 +84,13 @@ const Login = () => {
     if (authLoading) return null;
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'white', flexDirection: isMobile ? 'column' : 'row' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'white', flexDirection: isMobile ? 'column' : 'row', maxWidth: 'var(--max-content-width)', margin: '0 auto' }}>
             <div style={{ flex: '1', padding: isMobile ? '2rem 1.5rem' : '4rem 6rem', display: 'flex', flexDirection: 'column', maxWidth: isMobile ? '100%' : '700px' }}>
                 <Link to="/" style={{ textDecoration: 'none', marginBottom: '2rem' }}><Logo size={24} /></Link>
                 <h1 style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: 900, color: '#1e293b', marginBottom: '1rem', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
                     {isLogin ? 'Welcome Back' : 'Level Up Your Career'}
                 </h1>
-                <p style={{ color: '#64748b', marginBottom: '2.5rem', fontWeight: 500, fontSize: '0.95rem' }}>
+                <p style={{ color: '#475569', marginBottom: '2.5rem', fontWeight: 500, fontSize: '0.95rem' }}>
                     {isLogin ? 'Sign in to continue your journey.' : 'Join the best mentors in Africa.'}
                 </p>
 
@@ -122,7 +122,7 @@ const Login = () => {
                                         transform: 'translateY(-50%)',
                                         background: 'transparent',
                                         border: 'none',
-                                        color: '#64748b',
+                                        color: '#475569',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',

@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
 
     if (isDashboard) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', background: '#f8fafc', overflowX: 'hidden', position: 'relative' }}>
+            <div style={{ minHeight: '100vh', display: 'flex', background: '#ffffff', color: '#0f172a', overflowX: 'hidden', position: 'relative' }}>
                 {/* Mobile Overlay */}
                 {isMobileSidebarOpen && (
                     <div
@@ -68,7 +68,8 @@ const Layout = ({ children }) => {
                         padding: window.innerWidth <= 768 ? '1.5rem 1rem' : '2.5rem 3rem',
                         maxWidth: 'var(--max-content-width)',
                         width: '100%',
-                        margin: '0 auto'
+                        margin: '0 auto',
+                        background: '#ffffff'
                     }}>
                         {children}
                     </main>
@@ -79,16 +80,17 @@ const Layout = ({ children }) => {
 
     // Public / Landing Page Layout
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#0f172a' }}>
             <Navbar />
             <main style={{
                 flex: 1,
                 padding: location.pathname === '/' ? '0' : '7rem 2rem 2rem 2rem',
-                maxWidth: '1300px',
+                maxWidth: 'var(--max-content-width)',
                 width: '100%',
                 margin: '0 auto',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                background: '#ffffff'
             }}>
                 {children}
             </main>

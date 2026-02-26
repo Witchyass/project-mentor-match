@@ -90,7 +90,6 @@ const AIChatbot = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="glass"
                 style={{
                     position: 'fixed',
                     bottom: '2rem',
@@ -103,9 +102,10 @@ const AIChatbot = () => {
                     justifyContent: 'center',
                     cursor: 'pointer',
                     zIndex: 2000,
-                    background: 'var(--primary)',
+                    background: '#2563eb',
                     color: 'white',
-                    boxShadow: '0 8px 32px var(--primary-glow)'
+                    boxShadow: '0 8px 32px rgba(37, 99, 235, 0.4)',
+                    border: 'none'
                 }}
             >
                 <Bot size={32} />
@@ -122,7 +122,6 @@ const AIChatbot = () => {
                         initial={{ opacity: 0, y: 100, scale: 0.8, transformOrigin: 'bottom right' }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 100, scale: 0.8 }}
-                        className="glass"
                         style={{
                             position: 'fixed',
                             bottom: '6rem',
@@ -135,18 +134,20 @@ const AIChatbot = () => {
                             display: 'flex',
                             flexDirection: 'column',
                             overflow: 'hidden',
-                            boxShadow: 'var(--shadow-lg)'
+                            background: 'white',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
                         }}
                     >
                         {/* Header */}
-                        <div style={{ padding: '1.25rem', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ padding: '1.25rem', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '12px' }}>
                                     <Sparkles size={20} />
                                 </div>
                                 <div>
                                     <span style={{ fontWeight: 800, fontSize: '1.1rem', display: 'block' }}>Mentor AI</span>
-                                    <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>Online & helper-ready</span>
+                                    <span style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 500 }}>Online & helper-ready</span>
                                 </div>
                             </div>
                             <button
@@ -160,7 +161,7 @@ const AIChatbot = () => {
                         {/* Messages Area */}
                         <div
                             ref={scrollRef}
-                            style={{ flex: 1, padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'var(--background)' }}
+                            style={{ flex: 1, padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'white' }}
                         >
                             {messages.map((msg, i) => (
                                 <motion.div
@@ -172,27 +173,28 @@ const AIChatbot = () => {
                                         maxWidth: '85%',
                                         padding: '1rem',
                                         borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
-                                        background: msg.sender === 'user' ? 'var(--primary)' : 'var(--card-bg)',
-                                        color: msg.sender === 'user' ? 'white' : 'var(--text)',
+                                        background: msg.sender === 'user' ? '#2563eb' : '#f1f5f9',
+                                        color: msg.sender === 'user' ? 'white' : '#1e293b',
                                         fontSize: '0.9rem',
                                         boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
                                         lineHeight: 1.5,
-                                        border: msg.sender === 'user' ? 'none' : '1px solid var(--border)'
+                                        border: '1px solid #e2e8f0',
+                                        fontWeight: 500
                                     }}
                                 >
                                     {msg.text}
                                 </motion.div>
                             ))}
                             {isTyping && (
-                                <div style={{ alignSelf: 'flex-start', background: 'var(--card-bg)', padding: '0.75rem 1.25rem', borderRadius: '20px 20px 20px 4px', display: 'flex', gap: '4px', border: '1px solid var(--border)' }}>
-                                    <Loader2 className="animate-spin" size={16} style={{ color: 'var(--primary)' }} />
-                                    <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Thinking...</span>
+                                <div style={{ alignSelf: 'flex-start', background: '#f1f5f9', padding: '0.75rem 1.25rem', borderRadius: '20px 20px 20px 4px', display: 'flex', gap: '8px', border: '1px solid #e2e8f0' }}>
+                                    <Loader2 className="animate-spin" size={16} style={{ color: '#2563eb' }} />
+                                    <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>Thinking...</span>
                                 </div>
                             )}
                         </div>
 
                         {/* Quick Suggestions */}
-                        <div style={{ padding: '0.75rem 1rem', display: 'flex', gap: '0.5rem', overflowX: 'auto', background: 'var(--background)', borderTop: '1px solid var(--border)' }}>
+                        <div style={{ padding: '0.75rem 1rem', display: 'flex', gap: '0.5rem', overflowX: 'auto', background: 'white', borderTop: '1px solid #f1f5f9' }}>
                             {[
                                 "👋 Hello",
                                 "🔍 How to match?",
@@ -202,25 +204,25 @@ const AIChatbot = () => {
                                 <button
                                     key={q}
                                     onClick={() => handleSend(null, q)}
-                                    className="glass"
                                     style={{
                                         padding: '0.5rem 1rem',
                                         borderRadius: 'var(--radius-full)',
                                         fontSize: '0.75rem',
                                         whiteSpace: 'nowrap',
                                         cursor: 'pointer',
-                                        border: '1px solid var(--primary)',
-                                        color: 'var(--primary)',
-                                        fontWeight: 600,
+                                        border: '1px solid #2563eb',
+                                        background: 'transparent',
+                                        color: '#2563eb',
+                                        fontWeight: 800,
                                         transition: 'var(--transition)'
                                     }}
                                     onMouseEnter={(e) => {
-                                        e.target.style.background = 'var(--primary)';
+                                        e.target.style.background = '#2563eb';
                                         e.target.style.color = 'white';
                                     }}
                                     onMouseLeave={(e) => {
                                         e.target.style.background = 'transparent';
-                                        e.target.style.color = 'var(--primary)';
+                                        e.target.style.color = '#2563eb';
                                     }}
                                 >
                                     {q}
@@ -229,9 +231,8 @@ const AIChatbot = () => {
                         </div>
 
                         {/* Input Area */}
-                        <form onSubmit={handleSend} style={{ padding: '1.25rem', background: 'var(--background)', borderTop: '1px solid var(--border)', display: 'flex', gap: '0.75rem' }}>
+                        <form onSubmit={handleSend} style={{ padding: '1.25rem', background: 'white', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '0.75rem' }}>
                             <input
-                                className="glass"
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 placeholder="Write a message..."
@@ -239,16 +240,18 @@ const AIChatbot = () => {
                                     flex: 1,
                                     padding: '0.875rem 1.25rem',
                                     borderRadius: 'var(--radius-lg)',
-                                    border: '1px solid var(--border)',
+                                    border: '1px solid #e2e8f0',
+                                    background: '#f8fafc',
                                     fontSize: '0.9rem',
-                                    color: 'inherit',
-                                    outline: 'none'
+                                    color: '#1e293b',
+                                    outline: 'none',
+                                    fontWeight: 500
                                 }}
                             />
                             <button
                                 type="submit"
-                                className="btn btn-primary"
-                                style={{ padding: '0.875rem', borderRadius: 'var(--radius-lg)', width: '48px', height: '48px', justifyContent: 'center' }}
+                                className="btn"
+                                style={{ padding: '0.875rem', borderRadius: 'var(--radius-lg)', width: '48px', height: '48px', justifyContent: 'center', background: '#2563eb', color: 'white', border: 'none' }}
                             >
                                 <Send size={20} />
                             </button>

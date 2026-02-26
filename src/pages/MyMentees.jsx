@@ -74,7 +74,7 @@ const MyMentees = () => {
                                 <img src={m.profileImage || `https://ui-avatars.com/api/?name=${m.name}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </div>
                             <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e3a8a', marginBottom: '0.25rem' }}>{m.name}</h3>
-                            <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600, marginBottom: '1.25rem' }}>{m.role}</p>
+                            <p style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 600, marginBottom: '1.25rem' }}>{m.role}</p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem', padding: '1rem', background: '#f8fafc', borderRadius: '12px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
@@ -89,7 +89,7 @@ const MyMentees = () => {
 
                             <div style={{ display: 'flex', gap: '0.75rem' }}>
                                 <button onClick={() => navigate(`/messages?with=${m.id}`)} style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: '#1e3a8a', color: 'white', border: 'none', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>Message</button>
-                                <button onClick={() => navigate(`/profile/${m.id}`)} style={{ padding: '0.75rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer' }}><User size={18} color="#64748b" /></button>
+                                <button onClick={() => navigate(`/profile/${m.id}`)} style={{ padding: '0.75rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer' }}><User size={18} color="#475569" /></button>
                             </div>
                         </div>
                     ))}

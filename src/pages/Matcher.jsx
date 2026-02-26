@@ -103,9 +103,9 @@ const MatchCard = ({ profile, onSwipe, index, isMobile }) => {
                             <span key={skill} style={{ background: '#eff6ff', color: '#1e3a8a', padding: '0.25rem 0.75rem', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700 }}>{skill}</span>
                         ))}
                     </div>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{profile.bio || 'Wants to help more people grow in their tech journey.'}</p>
+                    <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{profile.bio || 'Wants to help more people grow in their tech journey.'}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '0.75rem', borderTop: '1px solid #f1f5f9' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#475569', fontWeight: 600 }}>
                             <Globe size={14} /> {Array.isArray(profile.languages) ? profile.languages[0] : 'English'}
                         </div>
                     </div>
@@ -229,10 +229,10 @@ const Matcher = () => {
                         <CheckCircle size={32} color="#16a34a" />
                     </div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.5rem', color: '#1e293b' }}>You're Matched!</h2>
-                    <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '2rem' }}>You've found your mentor. Start your journey by reaching out or scheduling a session.</p>
+                    <p style={{ color: '#475569', fontSize: '0.9rem', marginBottom: '2rem' }}>You've found your mentor. Start your journey by reaching out or scheduling a session.</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#f8fafc', padding: '1rem', borderRadius: '16px', marginBottom: '2rem', textAlign: 'left' }}>
                         <img src={activeMatch.mentorImage} style={{ width: '48px', height: '48px', borderRadius: '12px' }} alt="mentor" />
-                        <div><p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b' }}>{activeMatch.mentorName}</p><p style={{ fontSize: '0.8rem', color: '#64748b' }}>{activeMatch.mentorCareer}</p></div>
+                        <div><p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1e293b' }}>{activeMatch.mentorName}</p><p style={{ fontSize: '0.8rem', color: '#475569' }}>{activeMatch.mentorCareer}</p></div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         <button onClick={() => navigate('/messages')} style={{ padding: '0.8rem', borderRadius: '12px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><MessageCircle size={18} /> Message</button>
@@ -246,13 +246,13 @@ const Matcher = () => {
     return (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: isMobile ? '1.5rem' : '3rem', padding: '1rem' }}>
             <div style={{ textAlign: 'center' }}>
-                <h1 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Discover Your <span style={{ color: '#3b82f6' }}>Match</span></h1>
-                <p style={{ color: '#64748b', fontSize: isMobile ? '0.95rem' : '1.1rem' }}>Swipe right to connect with your next {profile?.role === 'mentor' ? 'mentee' : 'mentor'}</p>
+                <h1 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 900, marginBottom: '0.5rem', color: '#1e293b' }}>Discover Your <span style={{ color: '#3b82f6' }}>Match</span></h1>
+                <p style={{ color: '#475569', fontSize: isMobile ? '0.95rem' : '1.1rem' }}>Swipe right to connect with your next {profile?.role === 'mentor' ? 'mentee' : 'mentor'}</p>
             </div>
 
             <div style={{ position: 'relative', width: isMobile ? '90vw' : '380px', height: isMobile ? '500px' : '560px', perspective: '1000px' }}>
                 <AnimatePresence>
-                    {loading ? <div style={{ textAlign: 'center', opacity: 0.5 }}>Analyzing...</div> : profiles.length > 0 ? (
+                    {loading ? <div style={{ textAlign: 'center', opacity: 0.5, color: '#475569' }}>Analyzing...</div> : profiles.length > 0 ? (
                         profiles.slice(0, 3).map((p, index) => (
                             <MatchCard key={p.id} profile={p} index={index} onSwipe={(dir) => dir === 'right' ? handleRequestMatch(p) : setProfiles(prev => prev.filter(i => i.id !== p.id))} isMobile={isMobile} />
                         )).reverse()
@@ -260,7 +260,7 @@ const Matcher = () => {
                         <div style={{ textAlign: 'center', padding: '2rem' }}>
                             <Sparkles size={48} color="#3b82f6" style={{ marginBottom: '1rem' }} />
                             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b' }}>All Caught Up!</h2>
-                            <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.5rem' }}>New experts join every day. Check back soon!</p>
+                            <p style={{ color: '#475569', fontSize: '0.9rem', marginTop: '0.5rem' }}>New experts join every day. Check back soon!</p>
                             <button onClick={() => window.location.reload()} style={{ marginTop: '1.5rem', padding: '0.6rem 1.5rem', borderRadius: '10px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800 }}>Refresh</button>
                         </div>
                     )}

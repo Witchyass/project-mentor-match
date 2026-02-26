@@ -97,7 +97,7 @@ const Sessions = () => {
                             fontSize: '0.9rem',
                             cursor: 'pointer',
                             background: activeTab === 'upcoming' ? '#3b82f6' : 'transparent',
-                            color: activeTab === 'upcoming' ? 'white' : '#64748b',
+                            color: activeTab === 'upcoming' ? 'white' : '#475569',
                             transition: '0.3s'
                         }}
                     >
@@ -114,7 +114,7 @@ const Sessions = () => {
                             fontSize: '0.9rem',
                             cursor: 'pointer',
                             background: activeTab === 'past' ? '#3b82f6' : 'transparent',
-                            color: activeTab === 'past' ? 'white' : '#64748b',
+                            color: activeTab === 'past' ? 'white' : '#475569',
                             transition: '0.3s'
                         }}
                     >
@@ -129,9 +129,9 @@ const Sessions = () => {
 
             {displaySessions.length === 0 ? (
                 <div style={{ background: 'white', padding: isMobile ? '3rem 1.5rem' : '4rem', borderRadius: '24px', border: '1px dashed #cbd5e1', textAlign: 'center' }}>
-                    <Calendar size={48} color="#94a3b8" style={{ marginBottom: '1.5rem' }} />
+                    <Calendar size={48} color="#475569" style={{ marginBottom: '1.5rem' }} />
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.5rem' }}>No sessions found</h3>
-                    <p style={{ color: '#64748b' }}>{activeTab === 'upcoming' ? "You don't have any scheduled sessions yet." : "No session history found."}</p>
+                    <p style={{ color: '#475569' }}>{activeTab === 'upcoming' ? "You don't have any scheduled sessions yet." : "No session history found."}</p>
                 </div>
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -168,7 +168,7 @@ const Sessions = () => {
                                                     <Video size={10} /> {isMentor ? 'Mentee' : 'Mentor'}
                                                 </span>
                                             </div>
-                                            <p style={{ color: '#64748b', fontWeight: 600, fontSize: '0.85rem' }}>Topic: {session.topic || 'Mentorship Session'}</p>
+                                            <p style={{ color: '#475569', fontWeight: 600, fontSize: '0.85rem' }}>Topic: {session.topic || 'Mentorship Session'}</p>
                                         </div>
                                     </div>
                                 );
@@ -176,11 +176,11 @@ const Sessions = () => {
 
                             <div style={{ display: 'flex', gap: isMobile ? '1rem' : '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1.25rem', flexWrap: 'wrap' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', fontWeight: 700, fontSize: '0.85rem' }}>
-                                    <Calendar size={16} color="#64748b" />
+                                    <Calendar size={16} color="#475569" />
                                     {new Date(session.dateTime).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', fontWeight: 700, fontSize: '0.85rem' }}>
-                                    <Clock size={16} color="#64748b" />
+                                    <Clock size={16} color="#475569" />
                                     {new Date(session.dateTime).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
                                 </div>
                             </div>
@@ -193,7 +193,7 @@ const Sessions = () => {
                                         {profile?.role === 'mentor' && (
                                             <button onClick={() => handleComplete(session.id, session.menteeName)} disabled={completing === session.id} style={{ flex: 1, minWidth: '140px', padding: '0.8rem', borderRadius: '12px', background: '#10b981', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.9rem' }}>{completing === session.id ? '...' : 'Mark Done'}</button>
                                         )}
-                                        <button onClick={() => navigate('/messages', { state: { userId: user.uid === session.mentorId ? session.menteeId : session.mentorId } })} style={{ padding: '0.8rem 1rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', color: '#64748b', fontWeight: 700, cursor: 'pointer' }}><MessageSquare size={18} /></button>
+                                        <button onClick={() => navigate('/messages', { state: { userId: user.uid === session.mentorId ? session.menteeId : session.mentorId } })} style={{ padding: '0.8rem 1rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', color: '#475569', fontWeight: 700, cursor: 'pointer' }}><MessageSquare size={18} /></button>
                                     </>
                                 ) : (
                                     <span style={{ fontSize: '0.85rem', fontWeight: 800, color: session.status === 'completed' ? '#10b981' : '#ef4444', textTransform: 'capitalize' }}>Status: {session.status}</span>

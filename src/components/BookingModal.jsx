@@ -160,12 +160,11 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                         initial={{ scale: 0.9, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                        className="glass"
-                        style={{ width: '100%', maxWidth: '450px', borderRadius: 'var(--radius-xl)', overflow: 'hidden', position: 'relative', zIndex: 1 }}
+                        style={{ width: '100%', maxWidth: '450px', background: 'white', border: '1px solid #e2e8f0', borderRadius: 'var(--radius-xl)', overflow: 'hidden', position: 'relative', zIndex: 1, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}
                     >
-                        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ fontWeight: 800 }}>{rescheduleMode ? 'Reschedule Session' : 'Schedule Session'}</h3>
-                            <X size={20} onClick={onClose} cursor="pointer" />
+                        <div style={{ padding: '1.5rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3 style={{ fontWeight: 800, color: '#1e293b' }}>{rescheduleMode ? 'Reschedule Session' : 'Schedule Session'}</h3>
+                            <X size={20} onClick={onClose} cursor="pointer" color="#475569" />
                         </div>
 
                         <div style={{ padding: '2rem', maxHeight: '70vh', overflowY: 'auto' }}>
@@ -180,14 +179,14 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                     </div>
                                     <button
                                         className="btn btn-primary"
-                                        style={{ width: '100%', background: '#22c55e' }}
+                                        style={{ width: '100%', background: '#22c55e', border: 'none' }}
                                         onClick={() => window.open(existingSession.meetLink, '_blank')}
                                     >
                                         Join Existing Session
                                     </button>
                                     <button
-                                        className="btn glass"
-                                        style={{ width: '100%', marginTop: '1rem' }}
+                                        className="btn"
+                                        style={{ width: '100%', marginTop: '1rem', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#475569' }}
                                         onClick={onClose}
                                     >
                                         Cancel
@@ -195,22 +194,31 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                 </div>
                             ) : step === 1 && (
                                 <div className="animate-fade-in">
-                                    <p style={{ opacity: 0.6, marginBottom: '1.5rem' }}>Select a preferred date to meet with <strong>{partnerName}</strong>.</p>
+                                    <p style={{ color: '#475569', marginBottom: '1.5rem', fontWeight: 500 }}>Select a preferred date to meet with <strong>{partnerName}</strong>.</p>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
                                         {dates.map(date => (
                                             <button
                                                 key={date.value}
-                                                className={`glass ${selectedDate === date.value ? 'btn-primary' : ''}`}
                                                 onClick={() => setSelectedDate(date.value)}
-                                                style={{ padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', cursor: 'pointer', transition: 'var(--transition)' }}
+                                                style={{
+                                                    padding: '1rem',
+                                                    borderRadius: 'var(--radius-md)',
+                                                    border: `1px solid ${selectedDate === date.value ? '#3b82f6' : '#e2e8f0'}`,
+                                                    background: selectedDate === date.value ? '#eff6ff' : 'white',
+                                                    color: selectedDate === date.value ? '#1e40af' : '#475569',
+                                                    fontSize: '0.9rem',
+                                                    fontWeight: 700,
+                                                    cursor: 'pointer',
+                                                    transition: 'var(--transition)'
+                                                }}
                                             >
                                                 {date.display}
                                             </button>
                                         ))}
                                     </div>
 
-                                    <div style={{ marginTop: '1.5rem' }}>
-                                        <p style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text)' }}>Session Topic</p>
+                                    <div style={{ marginTop: '2rem' }}>
+                                        <p style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '0.75rem', color: '#1e293b' }}>Session Topic</p>
                                         <input
                                             type="text"
                                             value={topic}
@@ -220,8 +228,9 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                                 width: '100%',
                                                 padding: '1rem',
                                                 borderRadius: 'var(--radius-md)',
-                                                border: '1px solid var(--border)',
-                                                background: 'rgba(255,255,255,0.5)',
+                                                border: '1px solid #e2e8f0',
+                                                background: '#f8fafc',
+                                                color: '#1e293b',
                                                 outline: 'none',
                                                 fontSize: '0.95rem'
                                             }}
@@ -246,9 +255,9 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                                     style={{
                                                         padding: '1rem',
                                                         borderRadius: 'var(--radius-md)',
-                                                        border: `1px solid ${isSelected ? 'var(--primary)' : taken ? '#e2e8f0' : 'var(--border)'}`,
-                                                        background: isSelected ? 'var(--primary)' : taken ? '#f8fafc' : 'rgba(255,255,255,0.7)',
-                                                        color: isSelected ? 'white' : taken ? '#cbd5e1' : 'inherit',
+                                                        border: `1px solid ${isSelected ? '#3b82f6' : taken ? '#f1f5f9' : '#e2e8f0'}`,
+                                                        background: isSelected ? '#3b82f6' : taken ? '#f8fafc' : 'white',
+                                                        color: isSelected ? 'white' : taken ? '#cbd5e1' : '#1e293b',
                                                         cursor: taken ? 'not-allowed' : 'pointer',
                                                         textAlign: 'left',
                                                         display: 'flex',
@@ -256,6 +265,7 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                                         justifyContent: 'space-between',
                                                         gap: '1rem',
                                                         opacity: taken ? 0.6 : 1,
+                                                        fontWeight: 700,
                                                         transition: '0.2s'
                                                     }}
                                                 >
@@ -280,12 +290,12 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                         })}
                                     </div>
 
-                                    <div className="glass" style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            <Calendar size={18} color="var(--primary)" />
+                                            <Calendar size={18} color="#3b82f6" />
                                             <div>
-                                                <p style={{ fontSize: '0.875rem', fontWeight: 700 }}>Automated Reminders</p>
-                                                <p style={{ fontSize: '0.75rem', opacity: 0.5 }}>Email + Google Calendar</p>
+                                                <p style={{ fontSize: '0.875rem', fontWeight: 800, color: '#1e293b' }}>Automated Reminders</p>
+                                                <p style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Email + Google Calendar</p>
                                             </div>
                                         </div>
                                         <input
@@ -296,9 +306,9 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
                                         />
                                     </div>
 
-                                    <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                                        <button className="btn glass" style={{ flex: 1 }} onClick={() => setStep(1)}>Back</button>
-                                        <button className="btn btn-primary" style={{ flex: 2 }} disabled={!selectedTime || isCreating} onClick={handleBooking}>
+                                    <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
+                                        <button className="btn" style={{ flex: 1, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#475569', fontWeight: 700 }} onClick={() => setStep(1)}>Back</button>
+                                        <button className="btn btn-primary" style={{ flex: 2, fontWeight: 800, border: 'none' }} disabled={!selectedTime || isCreating} onClick={handleBooking}>
                                             {isCreating ? 'Processing...' : (rescheduleMode ? 'Confirm Reschedule' : 'Confirm Booking')}
                                         </button>
                                     </div>
@@ -307,42 +317,44 @@ const BookingModal = ({ isOpen, onClose, mentorProfile, mentorId, rescheduleMode
 
                             {step === 3 && (
                                 <div className="animate-fade-in" style={{ textAlign: 'center', padding: '1rem 0' }}>
-                                    <div style={{ width: '80px', height: '80px', background: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'white' }}>
+                                    <div style={{ width: '80px', height: '80px', background: '#3b82f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'white' }}>
                                         <CheckCircle size={48} />
                                     </div>
-                                    <h2 style={{ marginBottom: '0.5rem' }}>{rescheduleMode ? 'Session Rescheduled!' : 'Session Booked!'}</h2>
-                                    <p style={{ opacity: 0.6, marginBottom: '2rem' }}>
+                                    <h2 style={{ marginBottom: '0.5rem', color: '#1e293b', fontWeight: 900 }}>{rescheduleMode ? 'Session Rescheduled!' : 'Session Booked!'}</h2>
+                                    <p style={{ color: '#475569', marginBottom: '2.5rem', fontWeight: 500 }}>
                                         See you on {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} at {selectedTime}!
                                     </p>
 
-                                    <div className="glass" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', marginBottom: '1.5rem', textAlign: 'left' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                                            <Video size={20} color="var(--primary)" />
-                                            <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>Google Meet Link</h3>
+                                    <div style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)', marginBottom: '1.5rem', textAlign: 'left', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                            <Video size={20} color="#3b82f6" />
+                                            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#1e293b' }}>Google Meet Link</h3>
                                         </div>
                                         <div style={{
-                                            background: 'var(--background)',
-                                            padding: '0.75rem 1rem',
-                                            borderRadius: 'var(--radius-md)',
+                                            background: 'white',
+                                            padding: '1rem',
+                                            borderRadius: '12px',
                                             fontFamily: 'monospace',
                                             fontSize: '0.875rem',
                                             wordBreak: 'break-all',
-                                            marginBottom: '0.75rem'
+                                            marginBottom: '1rem',
+                                            border: '1px solid #e2e8f0',
+                                            color: '#1e293b'
                                         }}>
                                             {meetLink}
                                         </div>
                                         <button
                                             onClick={copyMeetLink}
-                                            className="btn glass"
-                                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                                            className="btn"
+                                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: 'white', border: '1px solid #e2e8f0', color: '#1e3a8a', fontWeight: 800 }}
                                         >
                                             <Copy size={16} /> {copiedLink ? 'Copied!' : 'Copy Link'}
                                         </button>
                                     </div>
 
-                                    <div className="glass" style={{ padding: '1rem', borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                                        <ShieldAlert size={20} color="var(--primary)" />
-                                        <p style={{ fontSize: '0.75rem', textAlign: 'left', opacity: 0.8 }}><strong>Trust & Safety:</strong> Our AI will moderate this session to ensure a safe environment for both parties.</p>
+                                    <div style={{ padding: '1rem', borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem', background: '#eff6ff', border: '1px solid #dbeafe' }}>
+                                        <ShieldAlert size={20} color="#3b82f6" />
+                                        <p style={{ fontSize: '0.75rem', textAlign: 'left', color: '#1e40af', fontWeight: 600 }}><strong>Trust & Safety:</strong> Our AI will moderate this session to ensure a safe environment for both parties.</p>
                                     </div>
 
                                     <button className="btn btn-primary" style={{ width: '100%' }} onClick={onClose}>Done</button>

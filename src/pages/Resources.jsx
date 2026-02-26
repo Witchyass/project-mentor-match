@@ -35,7 +35,7 @@ const Resources = () => {
             <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: isMobile ? '2rem' : '4rem' }}>
                     <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.8rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em' }}>Resources</h1>
-                    <p style={{ color: '#64748b', fontSize: '1rem', marginTop: '0.5rem' }}>Curated guides to master your career and mentorship.</p>
+                    <p style={{ color: '#475569', fontSize: '1rem', marginTop: '0.5rem' }}>Curated guides to master your career and mentorship.</p>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
@@ -51,7 +51,7 @@ const Resources = () => {
                                         <div style={{ background: 'white', padding: '1.5rem', borderRadius: '16px', border: '1px solid #f1f5f9', height: '100%', transition: '0.2s' }}>
                                             <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase' }}>{res.source}</span>
                                             <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0.5rem 0', color: '#1e293b' }}>{res.title}</h3>
-                                            <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1rem' }}>{res.summary}</p>
+                                            <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '1rem' }}>{res.summary}</p>
                                             <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>Read More <ExternalLink size={14} /></div>
                                         </div>
                                     </a>

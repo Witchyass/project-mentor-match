@@ -123,7 +123,7 @@ const Notifications = () => {
                     <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 900, color: '#1e293b', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>
                         {activeTab === 'requests' ? 'Match Requests' : 'Activity'}
                     </h1>
-                    <p style={{ color: '#64748b', fontWeight: 500, fontSize: '0.95rem' }}>
+                    <p style={{ color: '#475569', fontWeight: 500, fontSize: '0.95rem' }}>
                         {activeTab === 'requests' ? 'Review people who want to connect with you.' : 'Stay updated with your latest activities.'}
                     </p>
                 </div>
@@ -149,7 +149,7 @@ const Notifications = () => {
                                 borderRadius: '8px',
                                 border: 'none',
                                 background: activeTab === tab.id ? 'white' : 'transparent',
-                                color: activeTab === tab.id ? '#1e3a8a' : '#64748b',
+                                color: activeTab === tab.id ? '#1e3a8a' : '#475569',
                                 fontWeight: 700,
                                 fontSize: '0.85rem',
                                 cursor: 'pointer',
@@ -200,9 +200,9 @@ const Notifications = () => {
                                             <h4 style={{ fontWeight: 800, fontSize: '1rem', color: '#1e293b' }}>
                                                 {notif.type === 'match_request' ? 'Match Request' : notif.type === 'new_message' ? 'New Message' : notif.type === 'match_declined' ? 'Mentor Connection Update' : 'Team Update'}
                                             </h4>
-                                            <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>{formatTimestamp(notif.timestamp, Date.now())}</span>
+                                            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: 600 }}>{formatTimestamp(notif.timestamp, Date.now())}</span>
                                         </div>
-                                        <p style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500, lineHeight: 1.5 }}>{notif.text}</p>
+                                        <p style={{ color: '#475569', fontSize: '0.9rem', fontWeight: 500, lineHeight: 1.5 }}>{notif.text}</p>
                                     </div>
                                 </div>
 
@@ -213,7 +213,7 @@ const Notifications = () => {
                                                 <img src={notif.menteeDetails?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${notif.fromId}`} style={{ width: '40px', height: '40px', borderRadius: '10px' }} alt="" />
                                                 <div>
                                                     <div style={{ fontWeight: 800, color: '#1e3a8a', fontSize: '0.9rem' }}>{notif.menteeDetails?.name || 'Potential Match'}</div>
-                                                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{notif.menteeDetails?.career}</div>
+                                                    <div style={{ fontSize: '0.75rem', color: '#475569' }}>{notif.menteeDetails?.career}</div>
                                                 </div>
                                             </div>
                                             <button
@@ -238,7 +238,7 @@ const Notifications = () => {
                                         ) : (
                                             <div style={{ display: 'flex', gap: '0.75rem' }}>
                                                 <button onClick={() => handleAccept(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: '#3b82f6', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem' }}>Accept</button>
-                                                <button onClick={() => handleDismiss(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', color: '#64748b', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>Decline</button>
+                                                <button onClick={() => handleDismiss(notif)} style={{ flex: 1, padding: '0.7rem', borderRadius: '10px', background: 'white', border: '1px solid #e2e8f0', color: '#475569', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>Decline</button>
                                             </div>
                                         )}
                                     </div>
@@ -282,7 +282,7 @@ const Notifications = () => {
                         <div style={{ textAlign: 'center', padding: '6rem 0', opacity: 0.5 }}>
                             <Bell size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.2 }} />
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1e293b' }}>All caught up!</h3>
-                            <p style={{ fontSize: '0.9rem', color: '#64748b' }}>You have no {activeTab} notifications.</p>
+                            <p style={{ fontSize: '0.9rem', color: '#475569' }}>You have no {activeTab} notifications.</p>
                         </div>
                     )}
                 </AnimatePresence>

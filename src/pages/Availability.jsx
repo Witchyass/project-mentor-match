@@ -81,7 +81,7 @@ const Availability = () => {
             <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', gap: '1rem' }}>
                 <div>
                     <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, color: '#1e293b' }}>Schedule</h1>
-                    <p style={{ color: '#64748b', fontWeight: 600, fontSize: '0.9rem' }}>Set your availability and manage bookings.</p>
+                    <p style={{ color: '#475569', fontWeight: 600, fontSize: '0.9rem' }}>Set your availability and manage bookings.</p>
                 </div>
                 {!isEditing ? (
                     <button onClick={() => setIsEditing(true)} style={{ width: isMobile ? '100%' : 'auto', padding: '0.75rem 1.25rem', background: '#1e3a8a', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
@@ -89,7 +89,7 @@ const Availability = () => {
                     </button>
                 ) : (
                     <div style={{ display: 'flex', gap: '1rem', width: isMobile ? '100%' : 'auto' }}>
-                        <button onClick={() => setIsEditing(false)} style={{ flex: 1, background: 'transparent', border: 'none', color: '#64748b', fontWeight: 700, cursor: 'pointer' }}>Cancel</button>
+                        <button onClick={() => setIsEditing(false)} style={{ flex: 1, background: 'transparent', border: 'none', color: '#475569', fontWeight: 700, cursor: 'pointer' }}>Cancel</button>
                         <button onClick={handleSave} disabled={saving} style={{ flex: 2, padding: '0.75rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                             {saving ? 'Saving...' : 'Save Changes'}
                         </button>
@@ -162,7 +162,7 @@ const Availability = () => {
                                 <div key={i} style={{ background: 'white', padding: '1rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#3b82f6' }}>{new Date(slot.startTime).toLocaleDateString()}</div>
                                     <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>{new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.4rem' }}>{slot.menteeName ? `With ${slot.menteeName}` : 'Booked'}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.4rem' }}>{slot.menteeName ? `With ${slot.menteeName}` : 'Booked'}</div>
                                 </div>
                             ))}
                         </div>

@@ -169,7 +169,7 @@ const Settings = () => {
                             <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
                                 <div>
                                     <p style={{ fontWeight: 800, color: '#1e293b', fontSize: '0.95rem', marginBottom: '0.2rem' }}>{item.label}</p>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.desc}</p>
+                                    <p style={{ fontSize: '0.8rem', color: '#475569' }}>{item.desc}</p>
                                 </div>
                                 <Toggle checked={settings.notifications[item.key] ?? true} onChange={() => toggleNotif(item.key)} disabled={saving} />
                             </div>
@@ -182,7 +182,7 @@ const Settings = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
                         <div>
                             <p style={{ fontWeight: 800, color: '#1e293b', fontSize: '0.95rem', marginBottom: '0.2rem' }}>Profile Visibility</p>
-                            <p style={{ fontSize: '0.8rem', color: '#64748b' }}>{settings.privacy?.profileVisibility ? 'Public' : 'Hidden'}</p>
+                            <p style={{ fontSize: '0.8rem', color: '#475569' }}>{settings.privacy?.profileVisibility ? 'Public' : 'Hidden'}</p>
                         </div>
                         <Toggle checked={settings.privacy?.profileVisibility ?? true} onChange={() => {
                             const updated = { ...settings, privacy: { ...settings.privacy, profileVisibility: !settings.privacy.profileVisibility } };
@@ -197,7 +197,7 @@ const Settings = () => {
                     <form onSubmit={handleUpdatePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         {['Current Password', 'New Password'].map((lbl, i) => (
                             <div key={i}>
-                                <label style={{ fontSize: '0.8rem', fontWeight: 800, color: '#64748b', display: 'block', marginBottom: '0.5rem' }}>{lbl}</label>
+                                <label style={{ fontSize: '0.8rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '0.5rem' }}>{lbl}</label>
                                 <input type="password" required style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', outline: 'none' }}
                                     value={i === 0 ? pw.current : pw.new} onChange={e => setPw(p => ({ ...p, [i === 0 ? 'current' : 'new']: e.target.value }))} />
                             </div>
@@ -208,7 +208,7 @@ const Settings = () => {
 
                 <Card danger isMobile={isMobile}>
                     <SectionTitle icon={<AlertTriangle size={16} />} danger>Danger Zone</SectionTitle>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>Once deleted, your account and profile data cannot be recovered.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '1.25rem' }}>Once deleted, your account and profile data cannot be recovered.</p>
 
                     {deleteStep === 0 ? (
                         <button

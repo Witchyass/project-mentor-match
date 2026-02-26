@@ -30,43 +30,41 @@ const FeedbackModal = ({ isOpen, onClose, mentorName }) => {
                         initial={{ scale: 0.9, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                        className="glass"
-                        style={{ width: '100%', maxWidth: '450px', borderRadius: 'var(--radius-xl)', overflow: 'hidden', position: 'relative', zIndex: 1 }}
+                        style={{ width: '100%', maxWidth: '450px', background: 'white', border: '1px solid #e2e8f0', borderRadius: 'var(--radius-xl)', overflow: 'hidden', position: 'relative', zIndex: 1, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}
                     >
                         <div style={{ padding: '2rem', textAlign: 'center' }}>
                             {!submitted ? (
                                 <form onSubmit={handleSubmit}>
-                                    <div style={{ width: '64px', height: '64px', background: 'var(--glass)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--primary)' }}>
+                                    <div style={{ width: '64px', height: '64px', background: '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#3b82f6', border: '1px solid #e2e8f0' }}>
                                         <MessageSquare size={32} />
                                     </div>
-                                    <h2 style={{ marginBottom: '0.5rem' }}>Session Completed</h2>
-                                    <p style={{ opacity: 0.6, marginBottom: '2rem', fontSize: '0.9rem' }}>How was your experience with <strong>{mentorName}</strong>?</p>
+                                    <h2 style={{ marginBottom: '0.5rem', color: '#1e293b', fontWeight: 900 }}>Session Completed</h2>
+                                    <p style={{ color: '#475569', marginBottom: '2.5rem', fontSize: '0.9rem', fontWeight: 500 }}>How was your experience with <strong>{mentorName}</strong>?</p>
 
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2.5rem' }}>
                                         {[1, 2, 3, 4, 5].map(star => (
                                             <Star
                                                 key={star}
                                                 size={32}
-                                                color={star <= rating ? 'gold' : 'var(--border)'}
-                                                fill={star <= rating ? 'gold' : 'transparent'}
+                                                color={star <= rating ? '#f59e0b' : '#cbd5e1'}
+                                                fill={star <= rating ? '#f59e0b' : 'transparent'}
                                                 cursor="pointer"
                                                 onClick={() => setRating(star)}
-                                                style={{ transition: 'var(--transition)' }}
+                                                style={{ transition: '0.2s transform', transform: star <= rating ? 'scale(1.1)' : 'scale(1)' }}
                                             />
                                         ))}
                                     </div>
 
                                     <textarea
-                                        className="glass"
                                         value={feedback}
                                         onChange={e => setFeedback(e.target.value)}
                                         placeholder="Share any thoughts or progress made..."
-                                        style={{ width: '100%', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', minHeight: '120px', color: 'inherit', marginBottom: '2rem' }}
+                                        style={{ width: '100%', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid #e2e8f0', minHeight: '120px', color: '#1e293b', marginBottom: '2.5rem', background: '#f8fafc', outline: 'none' }}
                                     />
 
                                     <div style={{ display: 'flex', gap: '1rem' }}>
-                                        <button type="button" className="btn glass" style={{ flex: 1 }} onClick={onClose}>Skip</button>
-                                        <button type="submit" className="btn btn-primary" style={{ flex: 2 }} disabled={!rating}>Submit Review</button>
+                                        <button type="button" className="btn" style={{ flex: 1, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#475569', fontWeight: 700 }} onClick={onClose}>Skip</button>
+                                        <button type="submit" className="btn btn-primary" style={{ flex: 2, fontWeight: 800, border: 'none' }} disabled={!rating}>Submit Review</button>
                                     </div>
                                 </form>
                             ) : (
@@ -75,7 +73,7 @@ const FeedbackModal = ({ isOpen, onClose, mentorName }) => {
                                         <Check size={48} />
                                     </div>
                                     <h3>Thank you!</h3>
-                                    <p style={{ opacity: 0.6, marginTop: '0.5rem' }}>Your feedback helps us maintain a safe and high-quality community.</p>
+                                    <p style={{ color: '#475569', marginTop: '0.75rem', fontWeight: 500 }}>Your feedback helps us maintain a safe and high-quality community.</p>
                                     <button className="btn btn-primary" style={{ width: '100%', marginTop: '2rem' }} onClick={onClose}>Back to Messenger</button>
                                 </div>
                             )}

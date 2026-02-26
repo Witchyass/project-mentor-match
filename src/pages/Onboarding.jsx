@@ -120,7 +120,7 @@ const Onboarding = () => {
                             <div key={i} style={{ height: '5px', flex: 1, background: i <= step ? '#1e3a8a' : '#e2e8f0', borderRadius: '10px' }} />
                         ))}
                     </div>
-                    <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>Step {step} of 5</p>
+                    <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#475569', fontWeight: 700 }}>Step {step} of 5</p>
                 </div>
 
                 <motion.div key={step} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'white', borderRadius: '24px', padding: isMobile ? '1.5rem' : '3rem', border: '1px solid #f1f5f9', minHeight: isMobile ? 'auto' : '500px', display: 'flex', flexDirection: 'column' }}>
@@ -133,7 +133,7 @@ const Onboarding = () => {
                                         <button key={r} onClick={() => setFormData({ ...formData, role: r })} style={{ flex: 1, padding: '1.5rem', borderRadius: '16px', border: formData.role === r ? '2px solid #1e3a8a' : '1.5px solid #e2e8f0', background: 'white', textAlign: 'left', cursor: 'pointer' }}>
                                             <div style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{r === 'mentee' ? '🎓' : '🌟'}</div>
                                             <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>I'm a {r.charAt(0).toUpperCase() + r.slice(1)}</h3>
-                                            <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.4rem' }}>{r === 'mentee' ? 'Looking to grow' : 'Sharing my knowledge'}</p>
+                                            <p style={{ fontSize: '0.8rem', color: '#475569', marginTop: '0.4rem' }}>{r === 'mentee' ? 'Looking to grow' : 'Sharing my knowledge'}</p>
                                         </button>
                                     ))}
                                 </div>
@@ -146,7 +146,7 @@ const Onboarding = () => {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                     {[{ lbl: 'Full Name', k: 'name' }, { lbl: 'Country', k: 'country' }, { lbl: 'Career Title', k: 'career' }, { lbl: 'Company', k: 'company' }].map(f => (
                                         <div key={f.k}>
-                                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#64748b', marginBottom: '0.4rem' }}>{f.lbl}</label>
+                                            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#475569', marginBottom: '0.4rem' }}>{f.lbl}</label>
                                             <input type="text" value={formData[f.k]} onChange={e => setFormData({ ...formData, [f.k]: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#f8fafc', outline: 'none' }} />
                                         </div>
                                     ))}
@@ -224,7 +224,7 @@ const Onboarding = () => {
                             <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                                 <CheckCircle2 size={60} color="#10b981" style={{ margin: '0 auto 1rem' }} />
                                 <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1e293b' }}>Ready to go!</h2>
-                                <p style={{ fontSize: '0.9rem', color: '#64748b' }}>Your customized profile will help us find the best matches.</p>
+                                <p style={{ fontSize: '0.9rem', color: '#475569' }}>Your customized profile will help us find the best matches.</p>
                             </div>
                         )}
                     </div>

@@ -163,7 +163,7 @@ const Dashboard = () => {
                     <h1 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
                         Welcome, {profile?.name?.split(' ')[0] || 'User'}! 👋
                     </h1>
-                    <p style={{ fontSize: isMobile ? '1rem' : '1.1rem', opacity: 0.9, fontWeight: 500, maxWidth: '600px' }}>
+                    <p style={{ fontSize: isMobile ? '1rem' : '1.1rem', fontWeight: 500, maxWidth: '600px' }}>
                         {isMentor
                             ? "You have new mentorship requests waiting. Ready to inspire?"
                             : "Your journey to growth continues. Check your upcoming sessions."
@@ -210,7 +210,7 @@ const Dashboard = () => {
                             {stat.icon}
                         </div>
                         <div>
-                            <p style={{ fontSize: isMobile ? '0.75rem' : '0.85rem', color: '#64748b', fontWeight: 600, marginBottom: '0.1rem' }}>{stat.label}</p>
+                            <p style={{ fontSize: isMobile ? '0.75rem' : '0.85rem', color: '#475569', fontWeight: 600, marginBottom: '0.1rem' }}>{stat.label}</p>
                             <p style={{ fontSize: isMobile ? '1.1rem' : '1.3rem', fontWeight: 800, color: '#1e293b' }}>{stat.value}</p>
                         </div>
                     </motion.div>
@@ -233,7 +233,7 @@ const Dashboard = () => {
 
                             {requests.length === 0 ? (
                                 <div style={{ background: 'white', padding: '3rem', borderRadius: '24px', border: '1px dashed #cbd5e1', textAlign: 'center' }}>
-                                    <p style={{ color: '#64748b', fontWeight: 600 }}>No pending requests.</p>
+                                    <p style={{ color: '#475569', fontWeight: 600 }}>No pending requests.</p>
                                 </div>
                             ) : (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -254,7 +254,7 @@ const Dashboard = () => {
                                                 </div>
                                                 <div>
                                                     <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#1e293b' }}>{request.fromName}</h4>
-                                                    <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 500 }}>{request.menteeDetails?.bio || 'Would like guidance on career growth.'}</p>
+                                                    <p style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 500 }}>{request.menteeDetails?.bio || 'Would like guidance on career growth.'}</p>
                                                 </div>
                                             </div>
                                             <div style={{ display: 'flex', gap: '0.5rem', width: isMobile ? '100%' : 'auto' }}>
@@ -278,7 +278,7 @@ const Dashboard = () => {
 
                         {displaySessions.length === 0 ? (
                             <div style={{ background: 'white', padding: '3rem', borderRadius: '24px', border: '1px dashed #cbd5e1', textAlign: 'center' }}>
-                                <p style={{ color: '#64748b', fontWeight: 600 }}>No upcoming sessions scheduled.</p>
+                                <p style={{ color: '#475569', fontWeight: 600 }}>No upcoming sessions scheduled.</p>
                                 <button onClick={() => navigate(isMentor ? '/availability' : '/discover')} style={{ marginTop: '1rem', background: '#1e3a8a', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
                                     {isMentor ? 'Set Availability' : 'Find a Mentor'}
                                 </button>
@@ -302,7 +302,7 @@ const Dashboard = () => {
                                             </div>
                                             <div>
                                                 <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b' }}>{session.topic || 'Mentorship Session'}</p>
-                                                <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
+                                                <p style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>
                                                     {new Date(session.dateTime).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                                                 </p>
                                             </div>
